@@ -26,6 +26,7 @@ def login_page(request):
         else:
             messages.error(request, 'Invalid credentials')
             return redirect('login')
+        
     if request.user.is_authenticated:
         if request.user.is_superuser:
             return redirect('admin:index')
@@ -33,9 +34,6 @@ def login_page(request):
             return redirect('home')
         elif hasattr(request.user, 'teacher'):
             return redirect('home')
-    else:
-        messages.info(request, 'Please log in to continue')
-        # If the user is not authenticated, show the login page
     return render(request, 'auth/login.html')
 
 def register(request):

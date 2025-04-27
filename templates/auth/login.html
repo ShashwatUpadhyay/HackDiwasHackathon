@@ -1,17 +1,10 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login - RhythmConnect</title>
+{% extends "index.html" %}
+{% block title %}Login - RhythmConnect{% endblock title %}
     {% load static %}
+    {% block content %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
     <div class="app">
-       {% include 'components/header.html' %}
-
         <!-- Login Section -->
         <section class="registration-section">
             <div class="floating-shapes">
@@ -62,7 +55,6 @@
                 </div>
             </div>
         </section>
-        {% include 'components/footer.html' %}
     </div>
 
     <script>
@@ -97,5 +89,4 @@
             }
         }
     </script>
-</body>
-</html> 
+    {% endblock content %}

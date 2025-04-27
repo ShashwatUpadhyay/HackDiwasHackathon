@@ -1,0 +1,91 @@
+from django.db import models
+import uuid
+from django.utils.text import slugify
+
+# Create your models here.
+class CourseCategory(models.Model):
+    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    name = models.CharField(max_length=100)
+    image = models.ImageField(upload_to='course_categories/')
+    slug = models.SlugField(unique=True, null=True, blank=True)  
+    description = models.TextField(null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(CourseCategory,self).save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.name
+
+class Course(models.Model):
+    title = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True, null=True, blank=True)  
+    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    description = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(Course,self).save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.title
+
+class Lesson(models.Model):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='lessons')
+    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    slug = models.SlugField(unique=True, null=True, blank=True)  
+    title = models.CharField(max_length=100)
+    content = models.FileField(upload_to='lessons/')
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(Lesson,self).save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.title
+    
+class Enrollment(models.Model):
+    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    student = models.ForeignKey('account.Student', on_delete=models.CASCADE, related_name='enrollments')
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name='enrollments')
+    enrolled_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.student} enrolled in {self.course}"
+
+# class Progress(models.Model):
+#     student = models.ForeignKey('account.Student', on_delete=models.CASCADE, related_name='progress')
+#     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='progress')
+#     completed_at = models.DateTimeField(auto_now_add=True)
+
+#     def __str__(self):
+#         return f"{self.student} completed {self.lesson}"
+
+# class Comment(models.Model):
+#     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='comments')
+#     student = models.ForeignKey('account.Student', on_delete=models.CASCADE, related_name='comments')
+#     content = models.TextField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     def __str__(self):
+#         return f"{self.student} commented on {self.lesson}"
+
+# class Rating(models.Model):
+#     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='ratings')
+#     student = models.ForeignKey('account.Student', on_delete=models.CASCADE, related_name='ratings')
+#     rating = models.IntegerField()
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now=True)
+
+#     def __str__(self):
+#         return f"{self.student} rated {self.lesson}"
