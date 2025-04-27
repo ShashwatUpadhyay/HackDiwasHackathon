@@ -12,6 +12,10 @@
         <div class="nav-search">
             <input type="text" placeholder="Search classes, instructors, or styles..." class="search-input">
         </div>
+        {% if not user.is_authenticated %}
         <button class="get-started-btn" onclick="window.location.href='{% url 'login' %}'">Start Learning</button>
+        {% else %}
+        <button class="get-started-btn text-danger" onclick="window.location.href='{% url 'logout' %}'">Logout</button>
+        {% endif %}
     </div>
 </nav>

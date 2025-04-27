@@ -1,17 +1,11 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Register - RhythmConnect</title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+{% extends "index.html" %}
+{% load static %}
+
+{% block content %}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-</head>
-<body>
     <div class="app">
         <!-- Navigation -->
-        {% include 'components/header.html' %}
+        <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 
         <!-- Registration Section -->
         <section class="registration-section">
@@ -22,7 +16,18 @@
                         <p>Join our community of artists and learners</p>
                     </div>
 
-                    <form class="registration-form">
+                    <form class="registration-form" method="POST">
+                        {% csrf_token %}
+                        {% if error %}
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                        {% endif %}
+                        {% if success %}
+                            <div class="alert alert-success" role="alert">
+                                {{ success }}
+                            </div>
+                        {% endif %}
                         <div class="form-group">
                             <label for="fullname">Full Name</label>
                             <input type="text" id="fullname" name="fullname" required placeholder="Enter your full name">
@@ -47,21 +52,24 @@
                             <input type="password" id="confirm-password" name="confirm-password" required placeholder="Confirm your password">
                         </div>
 
-                        <div class="form-group">
-                            <label>I am a:</label>
-                            <div class="role-selector">
-                                <label class="role-option">
-                                    <input type="radio" name="role" value="student" checked>
-                                    <span class="role-icon">👨‍🎓</span>
-                                    <span class="role-text">Student</span>
+                        <div class="mb-3">
+                            <label class="form-label">I am a:</label>
+                            <div class="d-flex gap-3">
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="role" id="studentRole" value="student" checked>
+                                <label class="form-check-label" for="studentRole">
+                                  <span class="me-1">👨‍🎓</span> Student
                                 </label>
-                                <label class="role-option">
-                                    <input type="radio" name="role" value="teacher">
-                                    <span class="role-icon">👨‍🏫</span>
-                                    <span class="role-text">Teacher</span>
+                              </div>
+                              <div class="form-check form-check-inline">
+                                <input class="form-check-input" type="radio" name="role" id="teacherRole" value="teacher">
+                                <label class="form-check-label" for="teacherRole">
+                                  <span class="me-1">👨‍🏫</span> Teacher
                                 </label>
+                              </div>
                             </div>
-                        </div>
+                          </div>
+                          
 
                         <div class="form-group">
                             <label class="checkbox-label">
@@ -79,7 +87,6 @@
                 </div>
             </div>
         </section>
-        {% include 'components/footer.html' %}
 
     </div>
 
@@ -137,5 +144,4 @@
             strengthText.textContent = strengthLevels[strength - 1];
         });
     </script>
-</body>
-</html> 
+    {% endblock content %}
