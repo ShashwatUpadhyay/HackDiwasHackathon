@@ -39,18 +39,18 @@ def login_page(request):
 def register(request):
     if request.method == 'POST':
         full_name = request.POST.get('fullname')
-        email= request.POST.get('email')
+        email= str(request.POST.get('email'))
         password= request.POST.get('password')
         confirm_password = request.POST.get('confirm-password')
         role = request.POST.get('role')
         
-        if User.objects.filter(email=email).exists():
+        if User.objects.filter(email=email.lower()).exists():
             return render(request, 'auth/register.html', {'error': 'Email already exists'})
         
         if password != confirm_password:
             return render(request, 'auth/register.html', {'error': 'Passwords do not match'})
         
-        user = User.objects.create_user(username=email, email=email)
+        user = User.objects.create_user(username=email, email=email.lower())
         user.set_password(password)
         user.save()
         

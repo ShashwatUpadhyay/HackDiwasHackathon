@@ -20,6 +20,23 @@ class CourseCategory(models.Model):
     def __str__(self):
         return self.name
 
+class CourseSubCategory(models.Model):  
+    uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    category = models.ForeignKey(CourseCategory, on_delete=models.CASCADE, related_name='subcategories')
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(unique=True, null=True, blank=True)  
+    image = models.ImageField(upload_to='course_subcategories/', null=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(CourseSubCategory,self).save(*args, **kwargs)
+    
+    def __str__(self):
+        return self.name
+
 class Course(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, null=True, blank=True)  
@@ -30,7 +47,7 @@ class Course(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.title)
         super(Course,self).save(*args, **kwargs)
     
     def __str__(self):
@@ -47,7 +64,7 @@ class Lesson(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.slug:
-            self.slug = slugify(self.name)
+            self.slug = slugify(self.title) 
         super(Lesson,self).save(*args, **kwargs)
     
     def __str__(self):

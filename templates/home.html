@@ -59,7 +59,7 @@
                     <p class="subtitle">Join our vibrant community of dance, yoga, and music enthusiasts. Learn from
                         expert instructors in a supportive environment.</p>
                     <div class="hero-buttons">
-                        <a href="register.html?role=teacher" class="explore-btn teacher">
+                        <a href="{% url 'exploreTeacher'  %}" class="explore-btn teacher">
                             <span class="icon">👨‍🏫</span>
                             Explore as Teacher
                         </a>
@@ -214,14 +214,16 @@
             <div class="categories-container">
                 <div class="categories-grid">
                     <!-- Dance Category -->
+                     {% if cate %}
+                    {% for cat in cate %}
                     <div class="category-card">
                         <div class="category-image">
-                            <img src="https://images.unsplash.com/photo-1545128485-c400e7702796?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Dance">
+                            <img src="{{cat.image.url}}" alt="Dance">
                         </div>
                         <div class="category-content">
-                            <div class="category-icon">💃</div>
-                            <h3 class="category-title">Dance</h3>
-                            <p class="category-description">Discover the joy of movement through various dance styles, from classical to contemporary.</p>
+                            {% comment %} <div class="category-icon">💃</div> {% endcomment %}
+                            <h3 class="category-title">{{cat.name}}</h3>
+                            <p class="category-description">{{cat.description}}</p>
                             <div class="category-stats">
                                 <div class="stat">
                                     <span class="stat-icon">👥</span>
@@ -232,64 +234,18 @@
                                     <span>50+ Courses</span>
                                 </div>
                             </div>
-                            <button class="explore-btn">
-                                Explore Dance
+                            <button onclick="window.location.href=''" class="explore-btn">
+                                Explore {{cat.name}}
                                 <span class="arrow">→</span>
                             </button>
                         </div>
                     </div>
-
-                    <!-- Yoga Category -->
-                    <div class="category-card">
-                        <div class="category-image">
-                            <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1520&q=80" alt="Yoga">
-                        </div>
-                        <div class="category-content">
-                            <div class="category-icon">🧘‍♀️</div>
-                            <h3 class="category-title">Yoga</h3>
-                            <p class="category-description">Find inner peace and physical harmony through our diverse yoga programs.</p>
-                            <div class="category-stats">
-                                <div class="stat">
-                                    <span class="stat-icon">👥</span>
-                                    <span>1500+ Students</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-icon">📚</span>
-                                    <span>40+ Courses</span>
-                                </div>
-                            </div>
-                            <button class="explore-btn">
-                                Explore Yoga
-                                <span class="arrow">→</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Music Category -->
-                    <div class="category-card">
-                        <div class="category-image">
-                            <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Music">
-                        </div>
-                        <div class="category-content">
-                            <div class="category-icon">🎵</div>
-                            <h3 class="category-title">Music</h3>
-                            <p class="category-description">Master instruments and vocal techniques with our accomplished artists.</p>
-                            <div class="category-stats">
-                                <div class="stat">
-                                    <span class="stat-icon">👥</span>
-                                    <span>1800+ Students</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-icon">📚</span>
-                                    <span>45+ Courses</span>
-                                </div>
-                            </div>
-                            <button class="explore-btn">
-                                Explore Music
-                                <span class="arrow">→</span>
-                            </button>
-                        </div>
-                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="alert alert-primary" role="alert">
+                        No categories available at the moment.
+                      </div>
+                    {% endif %}
                 </div>
             </div>
         </section>
