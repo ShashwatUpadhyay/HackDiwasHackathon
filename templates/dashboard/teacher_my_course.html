@@ -108,9 +108,10 @@
                 {% if course.is_free %}
                   <span class="badge bg-success">Free</span>
                 {% else %}
-                  <span class="text-danger fw-semibold">₹{{ course.discount_price }}</span>
-                  <span class="text-muted text-decoration-line-through">₹{{ course.price }}</span>
-                {% endif %}
+                  <span class="text-s fw-semibold">₹{{ course.price }}</span>
+                  {% comment %} <span class="text-muted text-decoration-line-through">₹{{ course.price }}</span> {% endcomment %}
+                  {% endif %}
+                  <span class="text-primary fw-semibold float-end">{{ course.enrollments.all|length }} Enrolled</span>
               </div>
     
               <div class="card-footer bg-transparent border-0">
