@@ -2,7 +2,9 @@ from django.shortcuts import render , redirect
 from django.contrib.auth.models import User
 from . import models
 from django.contrib.auth import authenticate, login, logout 
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from course.models import Course, CourseCategory, CourseSubCategory
 
 # Create your views here.
 def login_page(request):
@@ -19,7 +21,7 @@ def login_page(request):
             login(request, user)
             if user.is_superuser:
                 return redirect('admin:index')
-            elif hasattr(user, 'student'):
+            elif hasattr(user, 'student'):  
                 return redirect('home')
             elif hasattr(user, 'teacher'):
                 return redirect('home')
@@ -67,3 +69,53 @@ def logout_page(request):
     logout(request)
     messages.success(request, 'Logged out successfully')
     return redirect('login')
+
+@login_required(login_url='login')
+def teacher_dashboard(request):
+    return render(request, 'dashboard/teacher_dashboard.html')
+
+@login_required(login_url='login')
+def add_course(request):
+    cate = CourseCategory.objects.all()
+    subcate = CourseSubCategory.objects.all()
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        image = request.FILES.get('image')
+        category = request.POST.get('category')
+        subcategory = request.POST.get('type')
+        price = request.POST.get('price')
+        print(title, description, image, category, subcategory)
+        if Course.objects.filter(title=title).exists():
+            messages.error(request, 'Course with this title already exists')
+            return redirect('add_course')
+        course = Course.objects.create(
+            teacher=request.user.teacher,
+            title=title,
+            description=description,
+            image=image,
+            category=CourseCategory.objects.get(slug=category),
+            subcategory=CourseSubCategory.objects.get(slug=subcategory),
+        )
+        if price:
+            course.price = price
+        else:
+            course.is_free = True
+        
+        course.save()
+        messages.success(request, 'Course created successfully')
+        return redirect('teacher_dashboard')
+
+    context = {
+        'categories': cate,
+        'subcategories': subcate,
+    }
+    return render(request, 'dashboard/teacher_add_course.html',context)
+
+@login_required(login_url='login')
+def teacher_my_course(request):
+    courses = Course.objects.filter(teacher__user=request.user)
+    context = {
+        'courses': courses,
+    }
+    return render(request, 'dashboard/teacher_my_course.html', context)

@@ -38,10 +38,18 @@ class CourseSubCategory(models.Model):
         return self.name
 
 class Course(models.Model):
+    teacher = models.ForeignKey('account.Teacher', on_delete=models.CASCADE, related_name='courses')
     title = models.CharField(max_length=100)
     slug = models.SlugField(unique=True, null=True, blank=True)  
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     description = models.TextField()
+    image = models.ImageField(upload_to='courses/')
+    category = models.ForeignKey(CourseCategory, on_delete=models.CASCADE, related_name='courses')
+    subcategory = models.ForeignKey(CourseSubCategory, on_delete=models.CASCADE, related_name='courses')
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    discount_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    is_active = models.BooleanField(default=True)
+    is_free = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
