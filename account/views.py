@@ -154,3 +154,10 @@ def teacher_my_course(request):
         'courses': courses,
     }
     return render(request, 'dashboard/teacher_my_course.html', context)
+
+def teacher_profile(request, uid):
+    teacher = get_object_or_404(Teacher, uid=uid)
+    return render(request, 'dashboard/teacher-profile.html',{'teacher': teacher})
+
+def student_dashboard(request):
+    return render(request, 'dashboard/student_dashboard.html')

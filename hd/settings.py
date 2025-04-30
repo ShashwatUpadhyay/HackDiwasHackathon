@@ -15,7 +15,8 @@ import  os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-DOMAIN_NAME = 'http://127.0.0.1:8000/'
+# DOMAIN_NAME = 'http://127.0.0.1:8000/'
+DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -41,6 +42,7 @@ INSTALLED_APPS = [
     'base',
     'account',
     'course',
+    'payment',
 ]
 
 MIDDLEWARE = [
@@ -139,3 +141,6 @@ EMAIL_USE_SSL = False
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+RAZOR_KEY_ID = 'rzp_test_NY17O0pSjRmrGP'
+RAZOR_KEY_SECRET = '2prM7GP0jLhhJeXb5Nlw8Ilg'

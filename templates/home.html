@@ -53,6 +53,13 @@
 
         <!-- Hero Section -->
         <section class="hero">
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
             <div class="hero-content">
                 <div class="hero-text">
                     <h1>Discover Your<br>Rhythm</h1>

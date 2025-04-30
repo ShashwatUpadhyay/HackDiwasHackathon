@@ -1,0 +1,101 @@
+{% extends "index.html" %}
+{% block title %}{{ cate.title }} Courses - RhythmConnect{% endblock title %}
+{% block content %}
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+                <!-- Page Header with Animation -->
+        <header class="page-header">
+            <div class="pipe-flow">
+                <div class="pipe pipe-horizontal pipe-1">
+                    <div class="flowing-circle circle-purple" style="animation-delay: 0s;"></div>
+                    <div class="flowing-circle circle-blue" style="animation-delay: -2s;"></div>
+                    <div class="flowing-circle circle-gold" style="animation-delay: -4s;"></div>
+                </div>
+                <div class="pipe pipe-horizontal pipe-2">
+                    <div class="flowing-circle circle-blue" style="animation-delay: -1s;"></div>
+                    <div class="flowing-circle circle-purple" style="animation-delay: -3s;"></div>
+                    <div class="flowing-circle circle-gold" style="animation-delay: -5s;"></div>
+                </div>
+                <div class="pipe pipe-vertical pipe-3">
+                    <div class="flowing-circle circle-gold" style="animation-delay: -2s;"></div>
+                    <div class="flowing-circle circle-purple" style="animation-delay: -4s;"></div>
+                </div>
+                <div class="pipe pipe-vertical pipe-4">
+                    <div class="flowing-circle circle-blue" style="animation-delay: -3s;"></div>
+                    <div class="flowing-circle circle-gold" style="animation-delay: -5s;"></div>
+                </div>
+            </div>
+            <h1 class="page-title">Discover the Art {{ subcate.title }} {{ cate.title }}</h1>
+            <p class="page-subtitle">Explore various dance forms and learn from expert instructors</p>
+        </header>
+
+        <!-- Course Listings Section -->
+        <section class="course-listings">
+            <div class="courses-container">
+                <h2>Popular Dance Courses</h2>
+                <div class="courses-grid">
+                    <!-- Course 1 -->
+                     {% if courses %}
+                     {% for course in courses %}
+                    <div class="course-card">
+                        <div class="course-image">
+                            <img src="{{course.image.url}}" alt="Kathak Basics">
+                            <div class="course-level">{{course.level}}</div>
+                        </div>
+                        <div class="course-content">
+                            <h3>{{course.title}}</h3>
+                            <p>{{course.descrption}}</p>
+                            <div class="course-stats">
+                                <span>👥 200+ Students</span>
+                                <span>⭐ 4.8</span>
+                            </div>
+                            <a href="{% url 'course' course.slug %}" class="enroll-btn">Enroll Now</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <div class="alert alert-success" role="alert">
+                        No Courses Available
+                      </div>
+                    {% endif %}
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Theme Toggle Functionality
+        const themeToggle = document.querySelector('.theme-toggle');
+        const html = document.documentElement;
+        const themeIcon = themeToggle.querySelector('svg');
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+                `;
+            } else {
+                themeIcon.innerHTML = `
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+                `;
+            }
+        }
+    </script>
+    {% endblock content %}

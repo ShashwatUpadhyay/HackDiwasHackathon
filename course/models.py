@@ -49,6 +49,7 @@ class Course(models.Model):
     category = models.ForeignKey(CourseCategory, on_delete=models.CASCADE, related_name='courses')
     subcategory = models.ForeignKey(CourseSubCategory, on_delete=models.CASCADE, related_name='courses')
     level = models.CharField(max_length=20, choices=level_choice, null=True, blank=True)
+    duration = models.CharField(max_length=30, null=True, blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     is_active = models.BooleanField(default=True)

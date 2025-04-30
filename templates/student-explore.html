@@ -42,10 +42,9 @@
             <div class="courses-grid">
                 
                 {% for course in courses %}
-                    
-                    
                 <!-- Dance Course Card -->
                 <div class="feature-card">
+                <a href='{% url "course" course.slug %}' style='text-decoration:none;' class="">
                     <div class="card-image">
                         <img src="{{ course.image.url }}" alt="Dance Course">
                         <span class="level-badge">{{ course.level }}</span>
@@ -53,14 +52,49 @@
                     <div class="card-content">
                         <h3>{{ course.title }}</h3>
                         <p>{{ course.description|truncatewords:10 }}</p>
-                        <a href='{% url "courses" %}' class="action-button">Details</a>
+                        <button class="action-button">Details</button>
                     </div>
-                </div>
+                </a>
+            </div>
                 {% endfor %}
 
             </div>
         </section>
 
+        <section class="featured-instructors">
+            <div class="instructors-container">
+                <h2>Meet Our Expert Instructors</h2>
+                <div class="instructors-grid">
+                    <!-- Instructor 1 -->
+                     {% for teacher in teachers %}
+                    <div class="instructor-card">
+                        <div class="instructor-image">
+                            <img {% if teacher.image %}
+                            src="{{ teacher.image.url }}"
+                            {% else %}
+                            {% endif %} src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" alt="Priya Sharma">
+                        </div>
+                        <div class="instructor-content">
+                            <h3>{{teacher.full_name}}</h3>
+                            <p class="instructor-specialty">Kathak Expert</p>
+                            <p class="instructor-bio">Award-winning Kathak dancer with 15+ years of teaching experience</p>
+                            <div class="instructor-stats">
+                                <div class="stat">
+                                    <span class="stat-icon">👥</span>
+                                    <span>500+ Students</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="stat-icon">⭐</span>
+                                    <span>4.9 Rating</span>
+                                </div>
+                            </div>
+                            <a href="{% url "teacher_profile" teacher.uid %}" class="view-courses-btn">View Courses</a>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </section>
         <!-- Learning Paths -->
         <section class="content-section" style="background: var(--bg-secondary);">
             <h2 class="section-title">Learning Paths</h2>
