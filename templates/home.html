@@ -234,7 +234,7 @@
                                     <span>50+ Courses</span>
                                 </div>
                             </div>
-                            <button onclick="window.location.href=''" class="explore-btn">
+                            <button onclick="window.location.href='{% url 'cate_courses' cat.slug %}'" class="explore-btn">
                                 Explore {{cat.name}}
                                 <span class="arrow">→</span>
                             </button>

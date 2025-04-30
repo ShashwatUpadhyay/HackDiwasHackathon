@@ -40,44 +40,24 @@
             <p class="section-subtitle">Discover our most popular courses across different disciplines</p>
             
             <div class="courses-grid">
+                
+                {% for course in courses %}
+                    
+                    
                 <!-- Dance Course Card -->
                 <div class="feature-card">
                     <div class="card-image">
-                        <img src="https://images.unsplash.com/photo-1545128485-c400e7702796?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Dance Course">
-                        <span class="level-badge">Beginner</span>
+                        <img src="{{ course.image.url }}" alt="Dance Course">
+                        <span class="level-badge">{{ course.level }}</span>
                     </div>
                     <div class="card-content">
-                        <h3>Contemporary Dance Basics</h3>
-                        <p>Master the fundamentals of contemporary dance with expert guidance.</p>
-                        <button class="action-button">Enroll Now</button>
+                        <h3>{{ course.title }}</h3>
+                        <p>{{ course.description|truncatewords:10 }}</p>
+                        <a href='{% url "courses" %}' class="action-button">Details</a>
                     </div>
                 </div>
+                {% endfor %}
 
-                <!-- Music Course Card -->
-                <div class="feature-card">
-                    <div class="card-image">
-                        <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Music Course">
-                        <span class="level-badge">Intermediate</span>
-                    </div>
-                    <div class="card-content">
-                        <h3>Classical Piano</h3>
-                        <p>Learn classical piano techniques from renowned instructors.</p>
-                        <button class="action-button">Enroll Now</button>
-                    </div>
-                </div>
-
-                <!-- Yoga Course Card -->
-                <div class="feature-card">
-                    <div class="card-image">
-                        <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1520&q=80" alt="Yoga Course">
-                        <span class="level-badge">All Levels</span>
-                    </div>
-                    <div class="card-content">
-                        <h3>Hatha Yoga Journey</h3>
-                        <p>Experience the transformative power of Hatha yoga practice.</p>
-                        <button class="action-button">Enroll Now</button>
-                    </div>
-                </div>
             </div>
         </section>
 

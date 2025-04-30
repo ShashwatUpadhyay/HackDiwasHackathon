@@ -1,0 +1,170 @@
+{% extends "index.html" %}
+{% block title %}Teacher Dashboard | LMS{% endblock title %}
+{% load static %}
+
+{% block content %}
+
+
+<style>
+  body {
+    background: linear-gradient(to right, #4e54c8, #8f94fb);
+    min-height: 100vh;
+    color: #fff;
+  }
+
+  .sidebar {
+    background: rgba(0, 0, 0, 0.8);
+    min-height: 100vh;
+    backdrop-filter: blur(10px);
+  }
+
+  .sidebar a {
+    color: #fff;
+    padding: 15px 20px;
+    display: block;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+
+  .sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .sidebar h4 {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  }
+
+  .list-group-item {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border: none;
+  }
+
+  .menu-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -220px;
+      width: 200px;
+      z-index: 1000;
+      transition: left 0.3s;
+    }
+
+    .sidebar.show {
+      left: 0;
+    }
+  }
+</style>
+
+<div class="d-flex">
+  <!-- Sidebar -->
+  {% include "dashboard/teacher_sidebar.html" %}
+
+  <!-- Main content -->
+  <div class="container-fluid p-4 flex-grow-1 mt-5 pt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Welcome, {{ user.teacher.full_name }} 👋</h2>
+      <button class="menu-toggle d-md-none" onclick="toggleSidebar()">☰</button>
+    </div>
+
+    <div class="container my-5">
+      <div class="card shadow-lg border-0 rounded-4 p-4 bg-light">
+        <h3 class="mb-4 text-center  fw-bold text-gradient"><i class="bi bi-cloud-arrow-up"></i> Upload New Course</h3>
+        <form method="POST" class='text-primary' enctype="multipart/form-data">
+          {% csrf_token %}
+    
+          <div class="mb-3">
+            <label for="title" class="form-label fw-semibold">Course Title</label>
+            <input type="text" class="form-control" id="title" name="title" placeholder="Enter course title" required>
+          </div>
+    
+          <div class="mb-3">
+            <label for="description" class="form-label fw-semibold">Description</label>
+            <textarea class="form-control" id="description" name="description" rows="4" placeholder="Enter course details..." required></textarea>
+          </div>
+    
+          <div class="mb-3">
+            <label for="image" class="form-label fw-semibold">Course Image</label>
+            <input class="form-control" type="file" id="image" name="image" accept="image/*" required>
+          </div>
+    
+          <div class="row">
+            <div class="col-md-6 mb-3">
+              <label for="category" class="form-label fw-semibold">Category</label>
+              <select class="form-select" id="category" name="category" required>
+                <option value="">Choose...</option>
+                {% for categorie in categories %}
+                <option value="{{categorie.slug}}">{{categorie.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+    
+            <div class="col-md-6 mb-3">
+              <label for="type" class="form-label fw-semibold">Subcategory (Type)</label>
+              <select class="form-select" id="type" name="type" required>
+                <option value="" >Choose...</option>
+                {% for subcategorie in subcategories %}
+                <option value="{{subcategorie.slug}}">{{subcategorie.name}}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="price" class="form-label fw-semibold">Course price</label>
+            <input type="number" class="form-control" id="price" name="price" placeholder="Enter course price">
+            <small> Leave empty for free course</small>
+          </div>
+    
+          <div class="text-center mt-4">
+            <button type="submit" class="btn btn-primary px-4 py-2 rounded-pill fw-bold">Upload Course</button>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <!-- Optional Gradient Title Style -->
+    <style>
+      .text-gradient {
+        background: linear-gradient(to right, #6a11cb, #2575fc);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+    </style>
+    
+  </div>
+</div>
+
+<script>
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('show');
+  }
+</script>
+{% endblock content %}

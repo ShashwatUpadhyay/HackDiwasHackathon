@@ -1,0 +1,134 @@
+{% extends "index.html" %}
+{% block title %}Teacher Dashboard | LMS{% endblock title %}
+{% load static %}
+
+{% block content %}
+
+
+<style>
+  body {
+    background: linear-gradient(to right, #4e54c8, #8f94fb);
+    min-height: 100vh;
+    color: #fff;
+  }
+
+  .sidebar {
+    background: rgba(0, 0, 0, 0.8);
+    min-height: 100vh;
+    backdrop-filter: blur(10px);
+  }
+
+  .sidebar a {
+    color: #fff;
+    padding: 15px 20px;
+    display: block;
+    text-decoration: none;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background 0.3s;
+  }
+
+  .sidebar a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
+
+  .sidebar h4 {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border: none;
+    border-radius: 16px;
+    transition: transform 0.3s, box-shadow 0.3s;
+  }
+
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+  }
+
+  .list-group-item {
+    background: rgba(255, 255, 255, 0.05);
+    color: #fff;
+    border: none;
+  }
+
+  .menu-toggle {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: -220px;
+      width: 200px;
+      z-index: 1000;
+      transition: left 0.3s;
+    }
+
+    .sidebar.show {
+      left: 0;
+    }
+  }
+</style>
+
+<div class="d-flex">
+  <!-- Sidebar -->
+  {% include "dashboard/teacher_sidebar.html" %}
+
+  <!-- Main content -->
+  <div class="container-fluid p-4 flex-grow-1 mt-5 pt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2>Welcome, {{ user.teacher.full_name }} 👋</h2>
+      <button class="menu-toggle d-md-none" onclick="toggleSidebar()">☰</button>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="card p-4 text-center shadow">
+          <h6>Total Courses</h6>
+          <h2 class="fw-bold">{{ user.teacher.course_count }}</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-4 text-center shadow">
+          <h6>Total Students</h6>
+          <h2 class="fw-bold">{{ user.teacher.total_student }}</h2>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="card p-4 text-center shadow">
+          <h6>New Comments</h6>
+          <h2 class="fw-bold">12</h2>
+        </div>
+      </div>
+    </div>
+
+    <hr class="my-4 border-light">
+
+    <h4 class="mb-3">📌 Recent Activity</h4>
+    <ul class="list-group shadow-sm">
+      <li class="list-group-item">💬 New comment on <strong>"Java Basics"</strong></li>
+      <li class="list-group-item">🧑‍🎓 4 students enrolled in <strong>"React for Beginners"</strong></li>
+      <li class="list-group-item">🆕 You published a new course <strong>"Python DSA"</strong></li>
+    </ul>
+  </div>
+</div>
+
+<script>
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    sidebar.classList.toggle('show');
+  }
+</script>
+{% endblock content %}
