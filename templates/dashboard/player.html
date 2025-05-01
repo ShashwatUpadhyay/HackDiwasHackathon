@@ -363,7 +363,7 @@ KalaPathshala Player
             
             
             {% for video in videos %}
-            <a style='text-decoration:none;' href='{% url "videoplayer" course.uid video.uid  %}'><li class="sidebar-item">{{video.title}}</li></a>
+            <a style='text-decoration:none;' href='{% url "videoplayer" course.uid video.uid  %}'><li class="sidebar-item {% if user.student %}{% if video|completed:user.student %}text-success{% endif %}{% endif %} ">{{video.title}}</li></a>
             {% endfor %}
             
             {% if user.teacher %}

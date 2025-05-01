@@ -44,10 +44,16 @@
               Sign In
             </a>
             {% else %}
-            
+            {% if user.is_superuser %}
+            <a href="/admin" class="btn rounded-pill fw-semibold" style="background: linear-gradient(135deg, #6D28D9 0%, #1E40AF 100%); color: white; padding: 0.6rem 1.4rem; font-size: 0.9rem;">
+              Admin
+            </a>
+            {% else %}
             <a href="{% if user.teacher %}{% url 'teacher_dashboard' %}{% else %}{% url 'student_dashboard' %} {% endif %}" class="btn rounded-pill fw-semibold" style="background: linear-gradient(135deg, #6D28D9 0%, #1E40AF 100%); color: white; padding: 0.6rem 1.4rem; font-size: 0.9rem;">
               Dashboard
             </a>
+            {% endif %}
+            
             <a href="{% url 'logout' %}" class="btn rounded-pill fw-semibold" style="background: linear-gradient(135deg, #6D28D9 0%, #1E40AF 100%); color: white; padding: 0.6rem 1.4rem; font-size: 0.9rem;">
               Logout
             </a>

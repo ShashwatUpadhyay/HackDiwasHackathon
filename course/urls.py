@@ -8,4 +8,5 @@ urlpatterns = [
     path('<uid>/video/<v_uid>/',views.videoplayer,name='videoplayer'),
     path('<uid>/upload-video/',views.upload_video,name='upload_video'),
     path('mark_complete/<uid>/',views.mark_complete,name='mark_complete'),
+    path('enrolled/invoice/<uid>/',views.invoice,name='invoice'),
 ]

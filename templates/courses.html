@@ -83,7 +83,7 @@
                      {% for course in courses %}
                         <div class="course-card">
                             <div class="course-image">
-                                <img src="https://images.unsplash.com/photo-1545128485-c400e7702796?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Kathak Basics">
+                                <img src="{{course.image.url}}" alt="{{course.title}}">
                                 <div class="course-level">{{course.level}}</div>
                             </div>
                             <div class="course-content">
@@ -93,7 +93,7 @@
                                     <span>👥 {{course.enrollments.all|length}}+ Students</span>
                                     <span>⭐ 4.8</span>
                                 </div>
-                                <a href="{% url "course" course.slug %}" class="enroll-btn">Enroll Now</a>
+                                <a href="{% url "course" course.slug %}" class="enroll-btn">Details <i class="bi bi-arrow-right"></i></a>
                             </div>
                         </div>
                     {% endfor %}
@@ -107,13 +107,18 @@
                 <h2>Meet Our Expert Instructors</h2>
                 <div class="instructors-grid">
                     <!-- Instructor 1 -->
+                     {% for teacher in teachers %}
                     <div class="instructor-card">
                         <div class="instructor-image">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" alt="Priya Sharma">
+                            <img {% if teacher.image %}
+                            src='{{teacher.image.url}}'
+                            {% else %}
+                            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" 
+                            {% endif %} alt="Priya Sharma">
                         </div>
                         <div class="instructor-content">
-                            <h3>Priya Sharma</h3>
-                            <p class="instructor-specialty">Kathak Expert</p>
+                            <h3>{{teacher.full_name}}</h3>
+                            <p class="instructor-specialty">{{teacher.category.name}}</p>
                             <p class="instructor-bio">Award-winning Kathak dancer with 15+ years of teaching experience</p>
                             <div class="instructor-stats">
                                 <div class="stat">
@@ -125,55 +130,10 @@
                                     <span>4.9 Rating</span>
                                 </div>
                             </div>
-                            <a href="priya-courses.html" class="view-courses-btn">View Courses</a>
+                            <a href="{% url "teacher_profile" teacher.uid %}" class="view-courses-btn">View Courses</a>
                         </div>
                     </div>
-
-                    <!-- Instructor 2 -->
-                    <div class="instructor-card">
-                        <div class="instructor-image">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Rahul Verma">
-                        </div>
-                        <div class="instructor-content">
-                            <h3>Rahul Verma</h3>
-                            <p class="instructor-specialty">Contemporary Dance</p>
-                            <p class="instructor-bio">Professional contemporary dancer and choreographer</p>
-                            <div class="instructor-stats">
-                                <div class="stat">
-                                    <span class="stat-icon">👥</span>
-                                    <span>300+ Students</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-icon">⭐</span>
-                                    <span>4.8 Rating</span>
-                                </div>
-                            </div>
-                            <a href="rahul-courses.html" class="view-courses-btn">View Courses</a>
-                        </div>
-                    </div>
-
-                    <!-- Instructor 3 -->
-                    <div class="instructor-card">
-                        <div class="instructor-image">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" alt="Ananya Iyer">
-                        </div>
-                        <div class="instructor-content">
-                            <h3>Ananya Iyer</h3>
-                            <p class="instructor-specialty">Bollywood Dance</p>
-                            <p class="instructor-bio">Bollywood choreographer with film industry experience</p>
-                            <div class="instructor-stats">
-                                <div class="stat">
-                                    <span class="stat-icon">👥</span>
-                                    <span>400+ Students</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-icon">⭐</span>
-                                    <span>4.9 Rating</span>
-                                </div>
-                            </div>
-                            <a href="ananya-courses.html" class="view-courses-btn">View Courses</a>
-                        </div>
-                    </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>

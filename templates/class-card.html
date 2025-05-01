@@ -918,13 +918,7 @@
         }
     </style>
     <div class="class-card mt-5">
-        {% if messages %}
-        <ul class="messages">
-            {% for message in messages %}
-            <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-            {% endfor %}
-        </ul>
-        {% endif %}
+       
         <div class="class-thumbnail">
             <img src="{{course.image.url}}" 
                  alt="Hip-hop dance class" 
@@ -933,7 +927,7 @@
                 <span>🔥</span> Popular
             </div>
             <div class="thumbnail-overlay">
-                <h1 class="thumbnail-title">{{course.level}} <span>•</span>{{course.title}}</h1>
+                <h1 class="thumbnail-title">{{course.level}} <span>•</span> {{course.title}}</h1>
                 <div class="thumbnail-subtitle">
                     <span>👤 {{course.teacher.full_name}}</span>
                     <span>•</span>
@@ -1152,50 +1146,22 @@
                 Recommended for You
             </h2>
             <div class="recommended-courses">
+                {% for recomm in recomms %}
                 <div class="course-card">
-                    <img src="https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" 
+                    <img src="{{ recomm.image.url }}" 
                          alt="Advanced Hip-Hop" 
                          class="course-image">
-                    <div class="course-content">
-                        <h3 class="course-title">Advanced Hip-Hop Techniques</h3>
+                    <a style='text-decoration:none;' href='{% url "course" recomm.slug %}' class="course-content">
+                        <h3 class="course-title">{{recomm.title}}</h3>
                         <div class="course-info">
-                            <span>⏳ 8 Weeks</span>
-                            <span>👥 12 Students</span>
+                            <span>⏳ {{recomm.duration|default:4}} Weeks</span>
+                            <span>👥 {{recomm.enrollments.all|length}} Students</span>
                         </div>
-                        <div class="course-price">₹2000</div>
-                        <div class="course-tag">Advanced Level</div>
-                    </div>
+                        <div class="course-price">₹{{recomm.discount_price}}</div>
+                        <div class="course-tag">{{recomm.level}}</div>
+                    </a>
                 </div>
-
-                <div class="course-card">
-                    <img src="https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" 
-                         alt="Street Dance Basics" 
-                         class="course-image">
-                    <div class="course-content">
-                        <h3 class="course-title">Street Dance Basics</h3>
-                        <div class="course-info">
-                            <span>⏳ 4 Weeks</span>
-                            <span>👥 20 Students</span>
-                        </div>
-                        <div class="course-price">₹1200</div>
-                        <div class="course-tag">Beginner Friendly</div>
-                    </div>
-                </div>
-
-                <div class="course-card">
-                    <img src="https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80" 
-                         alt="Dance Choreography" 
-                         class="course-image">
-                    <div class="course-content">
-                        <h3 class="course-title">Dance Choreography Masterclass</h3>
-                        <div class="course-info">
-                            <span>⏳ 6 Weeks</span>
-                            <span>👥 15 Students</span>
-                        </div>
-                        <div class="course-price">₹1800</div>
-                        <div class="course-tag">Intermediate</div>
-                    </div>
-                </div>
+                {% endfor %}
             </div>
         </div>
     </div>
@@ -1263,4 +1229,24 @@
             </div>
         </div>
     </footer>
+    <script>
+        // Django Messages with SweetAlert2
+        {% if messages %}
+        {% for message in messages %}
+        Swal.fire({
+            toast: true, // Make it a toast notification
+            position: 'top-end',
+            icon: '{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}',
+            title: "{{ message|escapejs }}", // Escape JS characters in message
+            showConfirmButton: false,
+            timer: 3500, // Show for 3.5 seconds
+            timerProgressBar: true,
+            didOpen: (toast) => {
+            toast.addEventListener('mouseenter', Swal.stopTimer)
+            toast.addEventListener('mouseleave', Swal.resumeTimer)
+            }
+        });
+        {% endfor %}
+        {% endif %}
+    </script>
 {% endblock content %}

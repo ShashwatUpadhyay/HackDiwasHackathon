@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice</title>
+    <style>
+        body {
+            font-family: 'Helvetica', sans-serif;
+            font-size: 14px;
+            padding: 40px;
+            color: #333;
+        }
+        .header {
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .section-title {
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            font-size: 16px;
+        }
+        .info-table, .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 5px;
+        }
+        .info-table td {
+            padding: 5px 0;
+        }
+        .invoice-table th, .invoice-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        .invoice-table th {
+            background-color: #f0f0f0;
+        }
+        .total-row td {
+            font-weight: bold;
+            border-top: 2px solid #000;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            font-size: 12px;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <h1>Course Enrollment Invoice</h1>
+        <p>Invoice ID: {{ invoice.uid|truncatechars:6 }}</p>
+        <p>Date: {{ invoice.enrolled_at|date:"d M Y" }}</p>
+    </div>
+
+    <div class="section-title">Billed To:</div>
+    <table class="info-table">
+        <tr>
+            <td><strong>Name:</strong> {{ invoice.student.full_name }}</td>
+        </tr>
+        <tr>
+            <td><strong>Email:</strong> {{ invoice.student.user.email }}</td>
+        </tr>
+    </table>
+
+    <div class="section-title">Course Details:</div>
+    <table class="invoice-table">
+        <tr>
+            <th>Course Name</th>
+            <th>Instructor</th>
+            <th>Payment Method</th>
+            <th>Amount Paid</th>
+        </tr>
+        <tr>
+            <td>{{ invoice.course.title }}</td>
+            <td>{{ invoice.course.teacher.full_name }}</td>
+            <td>Razorpay</td>
+            <td>₹ {{ invoice.course.discount_price|floatformat:2 }}</td>
+        </tr>
+        <tr class="total-row">
+            <td colspan="3" align="right">Total Paid:</td>
+            <td>₹ {{ invoice.course.discount_price|floatformat:2 }}</td>
+        </tr>
+    </table>
+
+    <div class="footer">
+        Thank you for enrolling in {{ invoice.course.title }}.<br>
+        This invoice is system generated and does not require a signature.
+    </div>
+
+</body>
+</html>

@@ -6,6 +6,7 @@ Student Dashboard | KalaPathshala
     
 
 {% block content %}
+{% load review_tag %}
     
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -440,13 +441,13 @@ Student Dashboard | KalaPathshala
             .course-card { flex-direction: column; gap: 1rem; }
         }
     </style>
-    <div class="dashboard-app">
+    <div class="dashboard-app mt-5">
         <aside class="sidebar">
             <div class="logo">KalaPathshala</div>
             <nav class="sidebar-nav">
                 <a class="sidebar-link active" id="nav-dashboard"><span>🏠</span> Dashboard</a>
                 <a class="sidebar-link" id="nav-courses"><span>📚</span> My Courses</a>
-                <a class="sidebar-link" id="nav-live" href="liveclass.html"><span>🔴</span> Live Classes</a>
+                <a class="sidebar-link" id="nav-live" href="#"><span>🔴</span> Live Classes</a>
                 <a class="sidebar-link" id="nav-profile"><span>👤</span> Profile</a>
                 <a class="sidebar-link" id="nav-notifications"><span>🔔</span> Notifications</a>
                 <a class="sidebar-link logout" id="nav-logout"><span>🚪</span> Logout</a>
@@ -455,20 +456,20 @@ Student Dashboard | KalaPathshala
         <main class="main-content">
             <!-- Dashboard Section -->
             <section class="dashboard-section active" id="dashboard-section">
-                <div class="welcome">Welcome, <span id="student-name">Student</span> 👋</div>
+                <div class="welcome">Welcome, <span id="student-name">{{ user.student.full_name }}</span> 👋</div>
                 <div class="summary-cards">
                     <div class="summary-card">
                         <div class="card-label">Total Courses</div>
-                        <div class="card-value">1</div>
+                        <div class="card-value">{{user.student.enrollments.all|length}}</div>
                     </div>
                     <div class="summary-card">
-                        <div class="card-label">Total Students</div>
-                        <div class="card-value">0</div>
+                        <div class="card-label">Lesson completed</div>
+                        <div class="card-value">{{user.student.progress.all|length}}</div>
                     </div>
-                    <div class="summary-card">
+                    {% comment %} <div class="summary-card">
                         <div class="card-label">New Comments</div>
                         <div class="card-value">12</div>
-                    </div>
+                    </div> {% endcomment %}
                 </div>
                 <div class="recent-activity">
                     <div class="recent-activity-title"><span>📌</span> Recent Activity</div>
@@ -486,24 +487,28 @@ Student Dashboard | KalaPathshala
                     
                     {% for course in courses %}
                     <div class="course-card">
-                        <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97" alt="Java Course" class="course-thumbnail">
+                        <img src="{{course.course.image.url}}" alt="Java Course" class="course-thumbnail">
                         <div class="course-content">
                             <div class="course-info">
                                 <h3>{{course.course.title}}</h3>
                                     <p>{{course.course.description}}.</p>
                             </div>
+                            {% if user.student %}
+                            
                             <div class="course-progress">
-                                <div class="progress-bar" style="width: 75%"></div>
+                                <div class="progress-bar" style="width: {{course.course|progress:user.student}}%"></div>
                             </div>
                             <div class="course-stats">
-                                <span>75% Complete</span>
+                                <span>{{course.course|progress:user.student}}% Complete</span>
                                 <span>{{ course.lesson_count }} Lessons</span>
                             </div>
+                            {% endif %}
+
                             <div class="course-actions">
-                                <a class="course-btn" href='{% url "videoplayer" course.course.uid course.course.latest_vdo_url.uid %}'>
+                                <a class="course-btn" href='{% url "course" course.course.slug  %}'>
                                     <span>🎬</span> Preview
                                 </a>
-                                <a class="course-btn"  href='{% url "upload_video" course.course.uid %}'>
+                                <a class="course-btn"  href='{% url "videoplayer" course.course.uid course.course.latest_vdo_url.uid %}'>
                                     <span>📚</span> Continue
                                 </a>
                             </div>

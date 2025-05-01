@@ -16,3 +16,10 @@ def enrolled(course,user):
 @register.filter
 def completed(lesson,student):
     return Progress.objects.filter(lesson=lesson,student=student).exists()
+
+@register.filter
+def progress(course,student):
+    lessons = len(course.lessons.all())
+    completed = Progress.objects.filter(lesson__course=course, student=student).count()
+    progess = (completed / lessons) * 100 if lessons > 0 else 0
+    return int(progess)
