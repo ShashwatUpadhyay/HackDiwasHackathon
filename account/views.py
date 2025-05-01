@@ -8,6 +8,7 @@ from django.contrib import messages
 from course.models import Course, CourseCategory, CourseSubCategory
 from hd.email_sender import verifyUser
 
+
 # Create your views here.
 def login_page(request):
     if request.method == 'POST':
@@ -154,3 +155,9 @@ def teacher_my_course(request):
         'courses': courses,
     }
     return render(request, 'dashboard/teacher_my_course.html', context)
+
+
+@login_required(login_url='login')
+def student_dashboard(request):
+    # course = 
+    return render(request, 'dashboard/student_dashboard.html')
