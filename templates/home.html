@@ -1,6 +1,6 @@
 {% extends "index.html" %}
 {% load static %}
-{% block title %}RhythmConnect - Dance • Yoga • Music{% endblock title %}
+{% block title %}KalaPathshala - Dance • Yoga • Music{% endblock title %}
 {% block content %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -53,6 +53,13 @@
 
         <!-- Hero Section -->
         <section class="hero">
+            {% if messages %}
+            <ul class="messages">
+                {% for message in messages %}
+                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                {% endfor %}
+            </ul>
+            {% endif %}
             <div class="hero-content">
                 <div class="hero-text">
                     <h1>Discover Your<br>Rhythm</h1>
@@ -113,7 +120,7 @@
                             <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
                         </div>
                         <div class="testimonial-content">
-                            <p>"RhythmConnect transformed my dance journey. The expert instructors and supportive community helped me master Kathak in just 6 months!"</p>
+                            <p>"KalaPathshala transformed my dance journey. The expert instructors and supportive community helped me master Kathak in just 6 months!"</p>
                             <div class="testimonial-author">
                                 <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Priya Sharma">
                                 <div class="testimonial-author-info">

@@ -115,7 +115,15 @@
               </div>
     
               <div class="card-footer bg-transparent border-0">
-                <a href="" class="btn btn-primary w-100">View Course</a>
+                {% comment %} href="{% url 'videoplayer' course.uid course.latest_vdo_url.uid %}" {% endcomment %}
+                
+                {% if course.latest_vdo_url.uid %}
+                  <a href="{% url 'videoplayer' course.uid course.latest_vdo_url.uid %}" class="btn btn-primary w-100">View Course </a>
+                {% else %}
+                <a href="{% url 'upload_video' course.uid %}" class="btn btn-primary w-100">Upload first video</a>
+
+                  {% endif %}
+                  
               </div>
             </div>
           </div>

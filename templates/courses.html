@@ -1,14 +1,11 @@
 {% extends 'index.html' %}
 
 {% block title %}
- Courses - RhythmConnect
+ Courses - KalaPathshala
 {% endblock title %}
     
     
     {% block content %}
-        
-        
-    <link rel="stylesheet" href="styles.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     <div class="app">
@@ -68,11 +65,38 @@
                                     <span>4.8 Rating</span>
                                 </div>
                             </div>
-                            <a href="#classical-courses" class="explore-btn">Explore Courses <span class="arrow">→</span></a>
+                            <a href="{% url 'subcate_courses' cate.slug subcate.slug %}" class="explore-btn">Explore Courses <span class="arrow">→</span></a>
                         </div>
                     </div>
                     {% endfor %}
 
+                </div>
+            </div>
+        </section>
+
+         <!-- Course Listings Section -->
+         <section class="course-listings">
+            <div class="courses-container">
+                <h2>Popular Dance Courses</h2>
+                <div class="courses-grid">
+                    <!-- Course 1 -->
+                     {% for course in courses %}
+                        <div class="course-card">
+                            <div class="course-image">
+                                <img src="https://images.unsplash.com/photo-1545128485-c400e7702796?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Kathak Basics">
+                                <div class="course-level">{{course.level}}</div>
+                            </div>
+                            <div class="course-content">
+                                <h3>{{course.title}}</h3>
+                                <p>{{course.descrption}}</p>
+                                <div class="course-stats">
+                                    <span>👥 {{course.enrollments.all|length}}+ Students</span>
+                                    <span>⭐ 4.8</span>
+                                </div>
+                                <a href="{% url "course" course.slug %}" class="enroll-btn">Enroll Now</a>
+                            </div>
+                        </div>
+                    {% endfor %}
                 </div>
             </div>
         </section>
@@ -154,64 +178,7 @@
             </div>
         </section>
 
-        <!-- Course Listings Section -->
-        <section class="course-listings">
-            <div class="courses-container">
-                <h2>Popular Dance Courses</h2>
-                <div class="courses-grid">
-                    <!-- Course 1 -->
-                    <div class="course-card">
-                        <div class="course-image">
-                            <img src="https://images.unsplash.com/photo-1545128485-c400e7702796?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Kathak Basics">
-                            <div class="course-level">Beginner</div>
-                        </div>
-                        <div class="course-content">
-                            <h3>Kathak Basics</h3>
-                            <p>Learn the fundamentals of Kathak dance with expert guidance</p>
-                            <div class="course-stats">
-                                <span>👥 200+ Students</span>
-                                <span>⭐ 4.8</span>
-                            </div>
-                            <a href="#" class="enroll-btn">Enroll Now</a>
-                        </div>
-                    </div>
-
-                    <!-- Course 2 -->
-                    <div class="course-card">
-                        <div class="course-image">
-                            <img src="https://images.unsplash.com/photo-1508700115892-45ecd05ae2ad?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1469&q=80" alt="Contemporary Fusion">
-                            <div class="course-level">Intermediate</div>
-                        </div>
-                        <div class="course-content">
-                            <h3>Contemporary Fusion</h3>
-                            <p>Blend traditional and modern dance techniques</p>
-                            <div class="course-stats">
-                                <span>👥 150+ Students</span>
-                                <span>⭐ 4.7</span>
-                            </div>
-                            <a href="#" class="enroll-btn">Enroll Now</a>
-                        </div>
-                    </div>
-
-                    <!-- Course 3 -->
-                    <div class="course-card">
-                        <div class="course-image">
-                            <img src="https://images.unsplash.com/photo-1518834107812-67b0b7c58434?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="Bollywood Beats">
-                            <div class="course-level">All Levels</div>
-                        </div>
-                        <div class="course-content">
-                            <h3>Bollywood Beats</h3>
-                            <p>Master popular Bollywood dance routines</p>
-                            <div class="course-stats">
-                                <span>👥 180+ Students</span>
-                                <span>⭐ 4.9</span>
-                            </div>
-                            <a href="#" class="enroll-btn">Enroll Now</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+       
     </div>
 
     <script>

@@ -43,3 +43,10 @@ class Teacher(models.Model):
         for course in self.courses.all():
             enrollments += len(course.enrollments.all())
         return enrollments
+
+class TeacherDemo(models.Model):
+    teacher = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='demo')
+    demo_video = models.FileField(upload_to='demo/')
+    
+    def __str__(self):
+        return self.teacher.full_name

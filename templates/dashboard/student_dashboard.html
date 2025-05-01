@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block title %}
-Student Dashboard | RhythmConnect
+Student Dashboard | KalaPathshala
 {% endblock title %}
     
 
@@ -442,7 +442,7 @@ Student Dashboard | RhythmConnect
     </style>
     <div class="dashboard-app">
         <aside class="sidebar">
-            <div class="logo">RhythmConnect</div>
+            <div class="logo">KalaPathshala</div>
             <nav class="sidebar-nav">
                 <a class="sidebar-link active" id="nav-dashboard"><span>🏠</span> Dashboard</a>
                 <a class="sidebar-link" id="nav-courses"><span>📚</span> My Courses</a>
@@ -483,54 +483,35 @@ Student Dashboard | RhythmConnect
             <section class="courses-section" id="courses-section">
                 <div class="profile-title">My Courses</div>
                 <div class="courses-list">
+                    
+                    {% for course in courses %}
                     <div class="course-card">
                         <img src="https://images.unsplash.com/photo-1517694712202-14dd9538aa97" alt="Java Course" class="course-thumbnail">
                         <div class="course-content">
                             <div class="course-info">
-                                <h3>Java Basics</h3>
-                                <p>Learn the fundamentals of Java programming.</p>
+                                <h3>{{course.course.title}}</h3>
+                                    <p>{{course.course.description}}.</p>
                             </div>
                             <div class="course-progress">
                                 <div class="progress-bar" style="width: 75%"></div>
                             </div>
                             <div class="course-stats">
                                 <span>75% Complete</span>
-                                <span>12 Lessons</span>
+                                <span>{{ course.lesson_count }} Lessons</span>
                             </div>
                             <div class="course-actions">
-                                <button class="course-btn" onclick="previewVideo('java')">
+                                <a class="course-btn" href='{% url "videoplayer" course.course.uid course.course.latest_vdo_url.uid %}'>
                                     <span>🎬</span> Preview
-                                </button>
-                                <button class="course-btn" onclick="continueLearning('java')">
+                                </a>
+                                <a class="course-btn"  href='{% url "upload_video" course.course.uid %}'>
                                     <span>📚</span> Continue
-                                </button>
+                                </a>
                             </div>
                         </div>
                     </div>
-                    <div class="course-card">
-                        <img src="https://images.unsplash.com/photo-1633356122544-f134324a6cee" alt="React Course" class="course-thumbnail">
-                        <div class="course-content">
-                            <div class="course-info">
-                                <h3>React for Beginners</h3>
-                                <p>Start building modern web apps with React.</p>
-                            </div>
-                            <div class="course-progress">
-                                <div class="progress-bar" style="width: 45%"></div>
-                            </div>
-                            <div class="course-stats">
-                                <span>45% Complete</span>
-                                <span>8 Lessons</span>
-                            </div>
-                            <div class="course-actions">
-                                <button class="course-btn" onclick="previewVideo('react')">
-                                    <span>🎬</span> Preview
-                                </button>
-                                <button class="course-btn" onclick="continueLearning('react')">
-                                    <span>📚</span> Continue
-                                </button>
-                            </div>
-                        </div>
-                    </div>
+                    {% endfor %}
+
+                    
                 </div>
             </section>
             <!-- Live Classes Section -->

@@ -5,7 +5,7 @@ from account.models import Teacher,Student
 from django.contrib.auth import authenticate, login, logout 
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from course.models import Course, CourseCategory, CourseSubCategory
+from course.models import Course, CourseCategory, CourseSubCategory,Enrollment
 from hd.email_sender import verifyUser
 
 
@@ -134,7 +134,7 @@ def add_course(request):
             subcategory=CourseSubCategory.objects.get(slug=subcategory),
         )
         if price:
-            course.price = price
+            course.discount_price = price
         else:
             course.is_free = True
         
@@ -157,7 +157,13 @@ def teacher_my_course(request):
     return render(request, 'dashboard/teacher_my_course.html', context)
 
 
-@login_required(login_url='login')
+def teacher_profile(request, uid):
+    teacher = get_object_or_404(Teacher, uid=uid)
+    return render(request, 'dashboard/teacher-profile.html',{'teacher': teacher})
+
 def student_dashboard(request):
-    # course = 
-    return render(request, 'dashboard/student_dashboard.html')
+    course = Enrollment.objects.filter(student=request.user.student)
+    context = {
+        'courses':course,
+    }
+    return render(request, 'dashboard/student_dashboard.html',context)

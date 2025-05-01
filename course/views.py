@@ -1,5 +1,8 @@
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
 from . import models
+from django.contrib import  messages
+from django.http import HttpResponseRedirect
+
 # Create your views here.
 def courses(request):
     course = models.Course.objects.filter(is_active = True)
@@ -14,4 +17,44 @@ def subcategory_courses(request, slug, sub):
     cate = get_object_or_404(models.CourseCategory, slug=slug)
     subcate = get_object_or_404(models.CourseSubCategory, slug=sub)
     course = models.Course.objects.filter(is_active = True,subcategory=subcate)
-    return render(request,'courses.html',{'courses':course,'cate':cate,'subcate':subcate})
+    return render(request,'courses-cards.html',{'courses':course,'cate':cate,'subcate':subcate})
+
+def course(request, slug):
+    cour = get_object_or_404(models.Course, slug=slug)
+    return render(request,'class-card.html',{'course':cour})    
+
+def upload_video(request,uid):
+    course = get_object_or_404(models.Course, uid=uid)
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        freeAccess = request.POST.get('freeAccess')
+        file = request.FILES.get('file') 
+        print(title, description,file,freeAccess)
+        lession = models.Lesson.objects.create(course=course,content=file,description=description,title=title)
+        if freeAccess:
+            lession.is_free = True
+        lession.save()
+        messages.success(request, "Video has been uploaded!!.")
+        return redirect('videoplayer' , uid = course.uid, v_uid = lession.uid)
+    context={
+        'course':course,
+    }
+    return render(request , 'dashboard/upload-content.html',context)
+
+def videoplayer(request,uid, v_uid):
+    course = get_object_or_404(models.Course, uid=uid)
+    videos = models.Lesson.objects.filter(course=course).order_by('created_at')
+    video = models.Lesson.objects.get(uid=v_uid)
+    context={
+        'course':course,
+        'videos':videos,
+        'video':video,
+    }
+    return render(request , 'dashboard/player.html',context)
+
+
+def mark_complete(request, uid):
+    profress = models.Progress.objects.create(student = request.user.student, lesson = get_object_or_404(models.Lesson, uid=uid))
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+
