@@ -83,3 +83,6 @@ def invoice(request, uid):
         return response
     
     return HttpResponse("Error generating PDF", status=400)
+
+def detection(request):
+    return render(request , 'dashboard/pose-detection.html')

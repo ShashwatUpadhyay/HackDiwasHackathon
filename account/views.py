@@ -156,6 +156,16 @@ def teacher_my_course(request):
     }
     return render(request, 'dashboard/teacher_my_course.html', context)
 
+@login_required(login_url='login')
+def teacher_my_course_students(request,uid):
+    course = get_object_or_404(Course,uid=uid)
+    enrollment = Enrollment.objects.filter(course=course)
+    context = {
+        'course': course,
+        'enrollments': enrollment,
+    }
+    return render(request, 'dashboard/teacher_my_course_students.html', context)
+
 
 def teacher_profile(request, uid):
     teacher = get_object_or_404(Teacher, uid=uid)

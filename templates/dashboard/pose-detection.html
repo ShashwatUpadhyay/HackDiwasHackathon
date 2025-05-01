@@ -1,0 +1,927 @@
+{% extends "index.html" %}
+{% block title %}Pose Detection | KalaPathshala{% endblock title %}
+    {% block content %}
+    {% load static %}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow-models/pose-detection"></script>
+    <style>
+        :root {
+            --primary-purple: #6d28d9;
+            --primary-blue: #2563eb;
+            --accent-gold: #d4a017;
+            --bg-primary: #f5f7fa;
+            --text-primary: #222;
+            --text-secondary: #666;
+            --card-shadow: 0 4px 24px rgba(109,40,217,0.10);
+            --card-radius: 20px;
+            --success-color: #10b981;
+            --error-color: #ef4444;
+        }
+        [data-theme="dark"] {
+            --bg-primary: #181c24;
+            --text-primary: #fff;
+            --text-secondary: #b3b3b3;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 1rem;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .pose-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 900px) {
+            .pose-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .video-container {
+            position: relative;
+            background: #000;
+            border-radius: var(--card-radius);
+            overflow: hidden;
+            aspect-ratio: 16/9;
+            width: 100%;
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .reference-container {
+            background: #23263a;
+            border-radius: var(--card-radius);
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .reference-image {
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .pose-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-gold);
+        }
+
+        .pose-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.8rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-purple);
+            color: #fff;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .btn-secondary {
+            background: #374151;
+            color: #fff;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+            transform: translateY(-2px);
+        }
+
+        .score-container {
+            background: #23263a;
+            border-radius: var(--card-radius);
+            padding: 1.5rem;
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .score {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .score-label {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        .pose-match {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            display: inline-block;
+        }
+
+        .pose-match.good {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+        }
+
+        .pose-match.bad {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--error-color);
+        }
+
+        .loading {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            font-size: 1.5rem;
+            color: #fff;
+            gap: 1rem;
+        }
+
+        .loading-spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-purple);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        .loading-status {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            text-align: center;
+            max-width: 300px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .loading.hidden {
+            display: none;
+        }
+
+        .error-message {
+            color: var(--error-color);
+            background: rgba(239, 68, 68, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+            display: none;
+        }
+
+        .pose-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .pose-card {
+            background: #23263a;
+            border-radius: var(--card-radius);
+            padding: 1.5rem;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .pose-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .pose-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 12px;
+            margin-bottom: 1rem;
+        }
+
+        .pose-card h3 {
+            color: var(--accent-gold);
+            margin-bottom: 0.5rem;
+        }
+
+        .pose-card p {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .timer {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--accent-gold);
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .high-score {
+            background: rgba(16, 185, 129, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-top: 1rem;
+            text-align: center;
+        }
+
+        .high-score span {
+            color: var(--success-color);
+            font-weight: 600;
+        }
+
+        .score-summary {
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 2rem;
+            border-radius: var(--card-radius);
+            text-align: center;
+            margin-top: 1rem;
+            position: relative;
+        }
+        
+        .score-summary h3 {
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+        
+        .score-summary p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .completion-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: var(--card-radius);
+            box-shadow: var(--card-shadow);
+            z-index: 1000;
+            text-align: center;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .completion-popup h2 {
+            color: var(--accent-gold);
+            margin-bottom: 1rem;
+        }
+
+        .completion-popup p {
+            margin-bottom: 1.5rem;
+            color: var(--text-secondary);
+        }
+
+        .completion-timer {
+            font-size: 1.5rem;
+            color: var(--primary-purple);
+            margin-bottom: 1.5rem;
+        }
+
+        .completion-link {
+            display: inline-block;
+            background: var(--primary-purple);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .completion-link:hover {
+            background: var(--primary-blue);
+            transform: translateY(-2px);
+        }
+
+        .popup-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 999;
+        }
+    </style>
+    <div class="container">
+        <div class="header">
+            <h1>Pose Practice</h1>
+            <p>Select a pose to practice and match your movements with the reference image</p>
+        </div>
+
+        <div class="pose-cards" id="pose-cards">
+            <!-- Pose cards will be dynamically added here -->
+        </div>
+
+        <div class="pose-container" id="pose-container" style="display: none;">
+            <div class="video-container">
+                <video id="video" playsinline></video>
+                <canvas id="output"></canvas>
+            </div>
+            <div class="reference-container">
+                <img id="reference-image" class="reference-image" src="" alt="Reference Pose">
+                <h2 class="pose-name" id="pose-name"></h2>
+                <p class="pose-description" id="pose-description"></p>
+                <div class="timer" id="timer">15</div>
+                <div class="score-container">
+                    <div class="score" id="score">0%</div>
+                    <div class="score-label">Match Score</div>
+                    <div class="pose-match" id="pose-match"></div>
+                </div>
+                <div class="high-score" id="high-score">
+                    Your best score: <span id="best-score">0%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button class="btn btn-primary" id="start-btn">
+                <span>🎥</span> Start Camera
+            </button>
+            <button class="btn btn-secondary" id="stop-btn" style="display: none;">
+                <span>⏹️</span> Stop Camera
+            </button>
+            <button class="btn btn-secondary" id="back-btn" style="display: none;">
+                <span>←</span> Back to Poses
+            </button>
+        </div>
+    </div>
+
+    <div class="loading" id="loading">
+        <div class="loading-spinner"></div>
+        <div class="loading-status">Loading pose detection model...</div>
+    </div>
+
+    <script>
+        // Pose data
+        const poses = [
+            {
+                id: 'tree',
+                name: 'Tree Pose (Vrikshasana)',
+                description: 'Stand on one leg, place the other foot on the inner thigh, and bring hands to prayer position. Keep your spine straight and focus on a point in front of you.',
+                image: '{% static "img/download.webp" %}'
+            },
+            {
+                id: 'warrior',
+                name: 'Warrior II (Virabhadrasana II)',
+                description: 'Stand with feet wide apart, turn right foot out 90 degrees, bend right knee, and extend arms parallel to floor. Keep your torso centered and gaze over your front hand.',
+                image: '{% static "img/download (1).webp" %}'
+            },
+            {
+                id: 'downward',
+                name: 'Downward Dog (Adho Mukha Svanasana)',
+                description: 'Form an inverted V-shape with your body, hands and feet on the ground, hips lifted high. Press your heels toward the floor and keep your spine long.',
+                image: '{% static "img/download (2).webp" %}'
+            },
+            {
+                id: 'mountain',
+                name: 'Mountain Pose (Tadasana)',
+                description: 'Stand tall with feet together, arms at your sides. Ground through your feet, lift your chest, and keep your shoulders relaxed.',
+                image: '{% static "img/download.webp" %}'
+            },
+            {
+                id: 'triangle',
+                name: 'Triangle Pose (Trikonasana)',
+                description: 'Stand with feet wide apart, extend arms parallel to floor, reach forward with front hand, and place it on shin or floor. Extend other arm upward.',
+                image: '{% static "img/download (1).webp" %}'
+            }
+        ];
+
+        // Reference pose keypoints for each pose
+        const referencePoses = {
+            tree: {
+                keypoints: [
+                    { x: 0.5, y: 0.1 },  // nose
+                    { x: 0.5, y: 0.2 },  // left eye
+                    { x: 0.5, y: 0.2 },  // right eye
+                    { x: 0.4, y: 0.3 },  // left ear
+                    { x: 0.6, y: 0.3 },  // right ear
+                    { x: 0.5, y: 0.4 },  // left shoulder
+                    { x: 0.5, y: 0.4 },  // right shoulder
+                    { x: 0.4, y: 0.5 },  // left elbow
+                    { x: 0.6, y: 0.5 },  // right elbow
+                    { x: 0.4, y: 0.6 },  // left wrist
+                    { x: 0.6, y: 0.6 },  // right wrist
+                    { x: 0.5, y: 0.7 },  // left hip
+                    { x: 0.5, y: 0.7 },  // right hip
+                    { x: 0.4, y: 0.9 },  // left knee
+                    { x: 0.6, y: 0.9 },  // right knee
+                    { x: 0.4, y: 1.0 },  // left ankle
+                    { x: 0.6, y: 1.0 }   // right ankle
+                ]
+            },
+            warrior: {
+                keypoints: [
+                    { x: 0.5, y: 0.1 },
+                    { x: 0.5, y: 0.2 },
+                    { x: 0.5, y: 0.2 },
+                    { x: 0.4, y: 0.3 },
+                    { x: 0.6, y: 0.3 },
+                    { x: 0.3, y: 0.4 },
+                    { x: 0.7, y: 0.4 },
+                    { x: 0.2, y: 0.5 },
+                    { x: 0.8, y: 0.5 },
+                    { x: 0.1, y: 0.6 },
+                    { x: 0.9, y: 0.6 },
+                    { x: 0.3, y: 0.7 },
+                    { x: 0.7, y: 0.7 },
+                    { x: 0.2, y: 0.9 },
+                    { x: 0.8, y: 0.9 },
+                    { x: 0.1, y: 1.0 },
+                    { x: 0.9, y: 1.0 }
+                ]
+            },
+            downward: {
+                keypoints: [
+                    { x: 0.5, y: 0.2 },
+                    { x: 0.5, y: 0.2 },
+                    { x: 0.5, y: 0.2 },
+                    { x: 0.4, y: 0.3 },
+                    { x: 0.6, y: 0.3 },
+                    { x: 0.3, y: 0.4 },
+                    { x: 0.7, y: 0.4 },
+                    { x: 0.2, y: 0.5 },
+                    { x: 0.8, y: 0.5 },
+                    { x: 0.1, y: 0.6 },
+                    { x: 0.9, y: 0.6 },
+                    { x: 0.4, y: 0.8 },
+                    { x: 0.6, y: 0.8 },
+                    { x: 0.3, y: 0.9 },
+                    { x: 0.7, y: 0.9 },
+                    { x: 0.2, y: 1.0 },
+                    { x: 0.8, y: 1.0 }
+                ]
+            }
+        };
+
+        // DOM elements
+        const poseCards = document.getElementById('pose-cards');
+        const poseContainer = document.getElementById('pose-container');
+        const video = document.getElementById('video');
+        const output = document.getElementById('output');
+        const startBtn = document.getElementById('start-btn');
+        const stopBtn = document.getElementById('stop-btn');
+        const backBtn = document.getElementById('back-btn');
+        const loading = document.getElementById('loading');
+        const timer = document.getElementById('timer');
+        const score = document.getElementById('score');
+        const poseMatch = document.getElementById('pose-match');
+        const bestScore = document.getElementById('best-score');
+
+        // Variables
+        let detector;
+        let currentPose = null;
+        let timerInterval;
+        let timeLeft = 15;
+        let highestScore = 0;
+        let isCameraActive = false;
+
+        // Initialize pose cards
+        function initializePoseCards() {
+            poseCards.innerHTML = poses.map(pose => `
+                <div class="pose-card" data-pose-id="${pose.id}">
+                    <img src="${pose.image}" alt="${pose.name}">
+                    <h3>${pose.name}</h3>
+                    <p>${pose.description}</p>
+                </div>
+            `).join('');
+
+            document.querySelectorAll('.pose-card').forEach(card => {
+                card.addEventListener('click', () => selectPose(card.dataset.poseId));
+            });
+        }
+
+        // Select pose
+        function selectPose(poseId) {
+            currentPose = poses.find(p => p.id === poseId);
+            document.getElementById('reference-image').src = currentPose.image;
+            document.getElementById('pose-name').textContent = currentPose.name;
+            document.getElementById('pose-description').textContent = currentPose.description;
+            
+            poseCards.style.display = 'none';
+            poseContainer.style.display = 'grid';
+            backBtn.style.display = 'block';
+            startBtn.style.display = 'block';
+            
+            // Load best score from localStorage
+            const savedScore = localStorage.getItem(`best_score_${poseId}`);
+            if (savedScore) {
+                highestScore = parseInt(savedScore);
+                bestScore.textContent = `${highestScore}%`;
+            }
+        }
+
+        // Initialize pose detection
+        async function initializePoseDetection() {
+            loading.classList.remove('hidden');
+            try {
+                await tf.ready();
+                detector = await poseDetection.createDetector(
+                    poseDetection.SupportedModels.MoveNet,
+                    {
+                        modelType: poseDetection.movenet.modelType.SINGLEPOSE_THUNDER
+                    }
+                );
+                loading.classList.add('hidden');
+                startBtn.disabled = false;
+            } catch (error) {
+                console.error('Error initializing pose detection:', error);
+                loading.querySelector('.loading-status').textContent = 'Error loading pose detection model';
+            }
+        }
+
+        // Start camera
+        async function startCamera() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({
+                    video: { 
+                        width: { ideal: 640 },
+                        height: { ideal: 480 },
+                        facingMode: 'user'
+                    }
+                });
+                video.srcObject = stream;
+                video.play();
+                
+                // Set canvas size to match video
+                video.onloadedmetadata = () => {
+                    output.width = video.videoWidth;
+                    output.height = video.videoHeight;
+                };
+                
+                isCameraActive = true;
+                startBtn.style.display = 'none';
+                stopBtn.style.display = 'block';
+                startTimer();
+                detectPose();
+            } catch (error) {
+                console.error('Error accessing camera:', error);
+                alert('Could not access camera. Please ensure camera permissions are granted.');
+            }
+        }
+
+        // Start timer
+        function startTimer() {
+            timeLeft = 15;
+            timer.textContent = timeLeft;
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                timer.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    stopCamera();
+                    // Ensure we save the final score
+                    if (highestScore === 0) {
+                        saveScore();
+                    }
+                    showScoreSummary();
+                }
+            }, 1000);
+        }
+
+        // Detect pose
+        async function detectPose() {
+            if (!isCameraActive) return;
+
+            try {
+                const poses = await detector.estimatePoses(video);
+                const ctx = output.getContext('2d');
+                ctx.clearRect(0, 0, output.width, output.height);
+
+                if (poses.length > 0) {
+                    const pose = poses[0];
+                    drawKeypoints(pose.keypoints, ctx);
+                    drawSkeleton(pose.keypoints, ctx);
+                    
+                    // Calculate match score
+                    const matchScore = calculateMatchScore(pose.keypoints);
+                    updateScore(matchScore);
+                }
+            } catch (error) {
+                console.error('Error detecting pose:', error);
+            }
+
+            if (isCameraActive) {
+                requestAnimationFrame(detectPose);
+            }
+        }
+
+        // Calculate match score
+        function calculateMatchScore(keypoints) {
+            if (!currentPose || !referencePoses[currentPose.id]) {
+                return 0;
+            }
+
+            const reference = referencePoses[currentPose.id].keypoints;
+            let totalScore = 0;
+            let validPoints = 0;
+
+            // Get the actual confidence scores from the keypoints
+            for (let i = 0; i < keypoints.length; i++) {
+                if (keypoints[i].score > 0.3) {
+                    // Use the actual confidence score from the pose detection model
+                    totalScore += keypoints[i].score * 100;
+                    validPoints++;
+                }
+            }
+
+            // Calculate average score
+            const averageScore = validPoints > 0 ? totalScore / validPoints : 0;
+            
+            // Apply penalties for missing keypoints
+            const missingPointsPenalty = (17 - validPoints) * 2; // 2 points penalty per missing keypoint
+            const finalScore = Math.max(0, averageScore - missingPointsPenalty);
+            
+            return Math.round(finalScore);
+        }
+
+        // Update score with more granular feedback
+        function updateScore(newScore) {
+            // Only update if we have a valid score
+            if (newScore > 0) {
+                score.textContent = `${newScore}%`;
+                if (newScore > highestScore) {
+                    highestScore = newScore;
+                    bestScore.textContent = `${highestScore}%`;
+                    saveScore();
+                }
+
+                if (newScore > 80) {
+                    poseMatch.textContent = 'Perfect Match!';
+                    poseMatch.className = 'pose-match good';
+                } else if (newScore > 60) {
+                    poseMatch.textContent = 'Good Match';
+                    poseMatch.className = 'pose-match good';
+                } else if (newScore > 40) {
+                    poseMatch.textContent = 'Fair Match';
+                    poseMatch.className = 'pose-match good';
+                } else if (newScore > 20) {
+                    poseMatch.textContent = 'Needs Work';
+                    poseMatch.className = 'pose-match bad';
+                } else {
+                    poseMatch.textContent = 'Keep Practicing';
+                    poseMatch.className = 'pose-match bad';
+                }
+            }
+        }
+
+        // Save score
+        function saveScore() {
+            if (currentPose) {
+                // Always save the score, even if it's 0
+                localStorage.setItem(`best_score_${currentPose.id}`, highestScore);
+                console.log(`Saving score ${highestScore} for pose ${currentPose.id}`);
+            }
+        }
+
+        // Show score summary
+        function showScoreSummary() {
+            const summary = document.createElement('div');
+            summary.className = 'score-summary';
+            summary.innerHTML = `
+                <h3>Practice Complete!</h3>
+                <p>Your best score: ${highestScore}%</p>
+                <p>${highestScore === 0 ? 'Keep practicing to improve your score!' : 'Great job!'}</p>
+                <button class="btn btn-primary" id="try-again-btn">Try Again</button>
+            `;
+            
+            const referenceContainer = document.querySelector('.reference-container');
+            referenceContainer.appendChild(summary);
+            
+            document.getElementById('try-again-btn').addEventListener('click', () => {
+                summary.remove();
+                startCamera();
+            });
+
+            // Show completion popup
+            showCompletionPopup();
+        }
+
+        // Show completion popup
+        function showCompletionPopup() {
+            // Create backdrop
+            const backdrop = document.createElement('div');
+            backdrop.className = 'popup-backdrop';
+            document.body.appendChild(backdrop);
+
+            // Create popup
+            const popup = document.createElement('div');
+            popup.className = 'completion-popup';
+            popup.innerHTML = `
+                <h2>Practice Complete!</h2>
+                <p>Your best score: ${highestScore}%</p>
+                <div class="completion-timer" id="completion-timer">15</div>
+                <a href="https://www.yogajournal.com/poses/" class="completion-link" target="_blank">
+                    Explore More Yoga Poses
+                </a>
+            `;
+            document.body.appendChild(popup);
+
+            // Start countdown
+            let timeLeft = 15;
+            const timerElement = document.getElementById('completion-timer');
+            const timerInterval = setInterval(() => {
+                timeLeft--;
+                timerElement.textContent = timeLeft;
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    popup.remove();
+                    backdrop.remove();
+                }
+            }, 1000);
+
+            // Close popup when clicking outside
+            backdrop.addEventListener('click', () => {
+                clearInterval(timerInterval);
+                popup.remove();
+                backdrop.remove();
+            });
+        }
+
+        // Stop camera
+        function stopCamera() {
+            if (video.srcObject) {
+                const tracks = video.srcObject.getTracks();
+                tracks.forEach(track => track.stop());
+                video.srcObject = null;
+            }
+            isCameraActive = false;
+            startBtn.style.display = 'block';
+            stopBtn.style.display = 'none';
+            clearInterval(timerInterval);
+            
+            // Clear canvas
+            const ctx = output.getContext('2d');
+            ctx.clearRect(0, 0, output.width, output.height);
+        }
+
+        // Draw keypoints with more granular color feedback
+        function drawKeypoints(keypoints, ctx) {
+            const matchScore = calculateMatchScore(keypoints);
+            let color;
+            if (matchScore > 80) {
+                color = '#00ff00'; // Green for perfect
+            } else if (matchScore > 60) {
+                color = '#7fff00'; // Light green for good
+            } else if (matchScore > 40) {
+                color = '#ffff00'; // Yellow for fair
+            } else if (matchScore > 20) {
+                color = '#ff7f00'; // Orange for needs work
+            } else {
+                color = '#ff0000'; // Red for poor
+            }
+
+            keypoints.forEach(keypoint => {
+                if (keypoint.score > 0.3) {
+                    ctx.beginPath();
+                    ctx.arc(keypoint.x, keypoint.y, 5, 0, 2 * Math.PI);
+                    ctx.fillStyle = color;
+                    ctx.fill();
+                }
+            });
+        }
+
+        // Draw skeleton with more granular color feedback
+        function drawSkeleton(keypoints, ctx) {
+            const matchScore = calculateMatchScore(keypoints);
+            let color;
+            if (matchScore > 80) {
+                color = '#00ff00'; // Green for perfect
+            } else if (matchScore > 60) {
+                color = '#7fff00'; // Light green for good
+            } else if (matchScore > 40) {
+                color = '#ffff00'; // Yellow for fair
+            } else if (matchScore > 20) {
+                color = '#ff7f00'; // Orange for needs work
+            } else {
+                color = '#ff0000'; // Red for poor
+            }
+
+            const adjacentKeyPoints = [
+                [0, 1], [0, 2], [1, 3], [2, 4], [0, 5], [0, 6], [5, 7],
+                [7, 9], [6, 8], [8, 10], [5, 6], [5, 11], [6, 12], [11, 12],
+                [11, 13], [13, 15], [12, 14], [14, 16]
+            ];
+
+            adjacentKeyPoints.forEach(points => {
+                const [i, j] = points;
+                const kp1 = keypoints[i];
+                const kp2 = keypoints[j];
+
+                if (kp1.score > 0.3 && kp2.score > 0.3) {
+                    ctx.beginPath();
+                    ctx.moveTo(kp1.x, kp1.y);
+                    ctx.lineTo(kp2.x, kp2.y);
+                    ctx.strokeStyle = color;
+                    ctx.lineWidth = 2;
+                    ctx.stroke();
+                }
+            });
+        }
+
+        // Event listeners
+        startBtn.addEventListener('click', startCamera);
+        stopBtn.addEventListener('click', stopCamera);
+        backBtn.addEventListener('click', () => {
+            stopCamera();
+            poseCards.style.display = 'grid';
+            poseContainer.style.display = 'none';
+            backBtn.style.display = 'none';
+        });
+
+        // Initialize
+        initializePoseCards();
+        initializePoseDetection();
+    </script>
+    {% endblock content %}

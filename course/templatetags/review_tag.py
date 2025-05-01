@@ -18,6 +18,14 @@ def completed(lesson,student):
     return Progress.objects.filter(lesson=lesson,student=student).exists()
 
 @register.filter
+def lesson_count(student):
+    enrollments = Enrollment.objects.filter(student=student)
+    total_lessons = 0
+    for e in enrollments:
+        total_lessons += e.course.lessons.count()
+    return total_lessons
+
+@register.filter
 def progress(course,student):
     lessons = len(course.lessons.all())
     completed = Progress.objects.filter(lesson__course=course, student=student).count()

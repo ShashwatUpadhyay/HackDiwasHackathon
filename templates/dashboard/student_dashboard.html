@@ -447,10 +447,11 @@ Student Dashboard | KalaPathshala
             <nav class="sidebar-nav">
                 <a class="sidebar-link active" id="nav-dashboard"><span>🏠</span> Dashboard</a>
                 <a class="sidebar-link" id="nav-courses"><span>📚</span> My Courses</a>
+                <a class="sidebar-link" id="nav-assignments"><span>📝</span> Assignments</a>
                 <a class="sidebar-link" id="nav-live" href="#"><span>🔴</span> Live Classes</a>
                 <a class="sidebar-link" id="nav-profile"><span>👤</span> Profile</a>
                 <a class="sidebar-link" id="nav-notifications"><span>🔔</span> Notifications</a>
-                <a class="sidebar-link logout" id="nav-logout"><span>🚪</span> Logout</a>
+                <a class="sidebar-link logout" id="nav-logout" href="{% url "logout" %}" ><span>🚪</span> Logout</a>
             </nav>
         </aside>
         <main class="main-content">
@@ -464,7 +465,7 @@ Student Dashboard | KalaPathshala
                     </div>
                     <div class="summary-card">
                         <div class="card-label">Lesson completed</div>
-                        <div class="card-value">{{user.student.progress.all|length}}</div>
+                        <div class="card-value">{{user.student.progress.all|length}}/{{user.student|lesson_count}}</div>
                     </div>
                     {% comment %} <div class="summary-card">
                         <div class="card-label">New Comments</div>
@@ -547,6 +548,156 @@ Student Dashboard | KalaPathshala
                     </form>
                 </div>
             </section>
+
+            <!-- Profile Section -->
+            <section class="profile-section" id="assignments-section" >
+                <div class="profile-title">My Assignments</div>
+                <div class="assignments-container">
+                    <div class="assignment-card my-3" style="border:2px solid #6d28d9; border-radius:20px; padding:2rem; background-color:#fff;">
+                        <div class="assignment-header">
+                            <h3>Kathak Basic Steps</h3>
+                            <span class="assignment-due">Due: 3 days left</span>
+                        </div>
+                        <div class="assignment-content">
+                            <p>Practice and record the basic tatkar steps with proper rhythm and posture. Focus on maintaining the correct hand gestures (mudras).</p>
+                            <div class="assignment-details">
+                                <span class="detail"><span>💃</span> 4 Steps</span>
+                                <span class="detail"><span>⏱️</span> 1 hour</span>
+                                <span class="detail"><span>⭐</span> 100 points</span>
+                            </div>
+                        </div>
+                        <button class="start-assignment-btn">
+                            <span>🎥</span> Start Practice
+                        </button>
+                    </div>
+                    <div class="assignment-card my-3" style="border:2px solid #6d28d9; border-radius:20px; padding:2rem; background-color:#fff;">
+                        <div class="assignment-header">
+                            <h3>Hatha Yoga Sequence</h3>
+                            <span class="assignment-due">Due: 2 days left</span>
+                        </div>
+                        <div class="assignment-content">
+                            <p>Perform the complete Surya Namaskar sequence with proper breathing techniques. Submit a video showing your form and alignment.</p>
+                            <div class="assignment-details">
+                                <span class="detail"><span>🧘</span> 12 Poses</span>
+                                <span class="detail"><span>⏱️</span> 30 mins</span>
+                                <span class="detail"><span>⭐</span> 150 points</span>
+                            </div>
+                        </div>
+                        <button class="start-assignment-btn">
+                            <span>🎥</span> Start Practice
+                        </button>
+                    </div>
+                    <div class="assignment-card my-3" style="border:2px solid #6d28d9; border-radius:20px; padding:2rem; background-color:#fff;">
+                        <div class="assignment-header">
+                            <h3>Carnatic Vocal Practice</h3>
+                            <span class="assignment-due">Due: 4 days left</span>
+                        </div>
+                        <div class="assignment-content">
+                            <p>Practice and record the Sarali Varisai exercises in three different speeds. Focus on maintaining proper sruti and laya.</p>
+                            <div class="assignment-details">
+                                <span class="detail"><span>🎵</span> 3 Exercises</span>
+                                <span class="detail"><span>⏱️</span> 45 mins</span>
+                                <span class="detail"><span>⭐</span> 120 points</span>
+                            </div>
+                        </div>
+                        <button class="start-assignment-btn">
+                            <span>🎥</span> Start Practice
+                        </button>
+                    </div>
+                    <div class="assignment-card my-3" style="border:2px solid #6d28d9; border-radius:20px; padding:2rem; background-color:#fff;">
+                        <div class="assignment-header">
+                            <h3>Bharatanatyam Adavus</h3>
+                            <span class="assignment-due">Due: 5 days left</span>
+                        </div>
+                        <div class="assignment-content">
+                            <p>Practice and demonstrate the Tatta Adavu sequence with proper footwork and hand gestures. Focus on maintaining the correct posture.</p>
+                            <div class="assignment-details">
+                                <span class="detail"><span>💃</span> 8 Adavus</span>
+                                <span class="detail"><span>⏱️</span> 1.5 hours</span>
+                                <span class="detail"><span>⭐</span> 200 points</span>
+                            </div>
+                        </div>
+                        <button class="start-assignment-btn" style="border:2px solid #6d28d9; border-radius:20px; padding:2rem; background-color:#fff;">
+                            <span>🎥</span> Start Practice
+                        </button>
+                    </div>
+                </div>
+            </section>
+
+            {% comment %} <!-- Assignments Section -->
+            <section class="assignments-section" id="assignments-section">
+                <div class="profile-title">My Assignments</div>
+                <div class="assignments-container">
+                    <div class="assignment-card">
+                        <div class="assignment-header">
+                            <h3>Kathak Basic Steps</h3>
+                            <span class="assignment-due">Due: 3 days left</span>
+                        </div>
+                        <div class="assignment-content">
+                            <p>Practice and record the basic tatkar steps with proper rhythm and posture. Focus on maintaining the correct hand gestures (mudras).</p>
+                            <div class="assignment-details">
+                                <span class="detail"><span>💃</span> 4 Steps</span>
+                                <span class="detail"><span>⏱️</span> 1 hour</span>
+                                <span class="detail"><span>⭐</span> 100 points</span>
+                            </div>
+                        </div>
+                        <button class="start-assignment-btn">
+                            <span>🎥</span> Start Practice
+                        </button>
+                    </div>
+                    <div class="assignment-card">
+                        <div class="assignment-header">
+                            <h3>Hatha Yoga Sequence</h3>
+                            <span class="assignment-due">Due: 2 days left</span>
+                        </div>
+                        <div class="assignment-content">
+                            <p>Perform the complete Surya Namaskar sequence with proper breathing techniques. Submit a video showing your form and alignment.</p>
+                            <div class="assignment-details">
+                                <span class="detail"><span>🧘</span> 12 Poses</span>
+                                <span class="detail"><span>⏱️</span> 30 mins</span>
+                                <span class="detail"><span>⭐</span> 150 points</span>
+                            </div>
+                        </div>
+                        <button class="start-assignment-btn">
+                            <span>🎥</span> Start Practice
+                        </button>
+                    </div>
+                    <div class="assignment-card">
+                        <div class="assignment-header">
+                            <h3>Carnatic Vocal Practice</h3>
+                            <span class="assignment-due">Due: 4 days left</span>
+                        </div>
+                        <div class="assignment-content">
+                            <p>Practice and record the Sarali Varisai exercises in three different speeds. Focus on maintaining proper sruti and laya.</p>
+                            <div class="assignment-details">
+                                <span class="detail"><span>🎵</span> 3 Exercises</span>
+                                <span class="detail"><span>⏱️</span> 45 mins</span>
+                                <span class="detail"><span>⭐</span> 120 points</span>
+                            </div>
+                        </div>
+                        <button class="start-assignment-btn">
+                            <span>🎥</span> Start Practice
+                        </button>
+                    </div>
+                    <div class="assignment-card">
+                        <div class="assignment-header">
+                            <h3>Bharatanatyam Adavus</h3>
+                            <span class="assignment-due">Due: 5 days left</span>
+                        </div>
+                        <div class="assignment-content">
+                            <p>Practice and demonstrate the Tatta Adavu sequence with proper footwork and hand gestures. Focus on maintaining the correct posture.</p>
+                            <div class="assignment-details">
+                                <span class="detail"><span>💃</span> 8 Adavus</span>
+                                <span class="detail"><span>⏱️</span> 1.5 hours</span>
+                                <span class="detail"><span>⭐</span> 200 points</span>
+                            </div>
+                        </div>
+                        <button class="start-assignment-btn">
+                            <span>🎥</span> Start Practice
+                        </button>
+                    </div>
+                </div>
+            </section> {% endcomment %}
         </main>
     </div>
     <script>
@@ -555,15 +706,18 @@ Student Dashboard | KalaPathshala
         const navProfile = document.getElementById('nav-profile');
         const navCourses = document.getElementById('nav-courses');
         const navLive = document.getElementById('nav-live');
+        const navAssignments = document.getElementById('nav-assignments');
         const dashboardSection = document.getElementById('dashboard-section');
         const profileSection = document.getElementById('profile-section');
         const coursesSection = document.getElementById('courses-section');
         const liveSection = document.getElementById('live-section');
+        const assignmentsSection = document.getElementById('assignments-section');
 
         function showSection(section) {
             dashboardSection.classList.remove('active');
             profileSection.classList.remove('active');
             coursesSection.classList.remove('active');
+            assignmentsSection.classList.remove('active');
             liveSection.style.display = 'none';
             section.classList.add('active');
             if(section === liveSection) {
@@ -578,6 +732,7 @@ Student Dashboard | KalaPathshala
             navProfile.classList.remove('active');
             navCourses.classList.remove('active');
             navLive.classList.remove('active');
+            navAssignments.classList.remove('active');
             showSection(dashboardSection);
         });
 
@@ -586,6 +741,7 @@ Student Dashboard | KalaPathshala
             navDashboard.classList.remove('active');
             navCourses.classList.remove('active');
             navLive.classList.remove('active');
+            navAssignments.classList.remove('active');
             showSection(profileSection);
         });
 
@@ -594,6 +750,7 @@ Student Dashboard | KalaPathshala
             navDashboard.classList.remove('active');
             navProfile.classList.remove('active');
             navLive.classList.remove('active');
+            navAssignments.classList.remove('active');
             showSection(coursesSection);
         });
 
@@ -602,7 +759,17 @@ Student Dashboard | KalaPathshala
             navDashboard.classList.remove('active');
             navProfile.classList.remove('active');
             navCourses.classList.remove('active');
+            navAssignments.classList.remove('active');
             showSection(liveSection);
+        });
+
+        navAssignments.addEventListener('click', () => {
+            navAssignments.classList.add('active');
+            navDashboard.classList.remove('active');
+            navProfile.classList.remove('active');
+            navCourses.classList.remove('active');
+            navLive.classList.remove('active');
+            showSection(assignmentsSection);
         });
 
         // Video preview functionality
@@ -672,21 +839,42 @@ Student Dashboard | KalaPathshala
         const html = document.documentElement;
         let theme = localStorage.getItem('theme') || 'light';
         html.setAttribute('data-theme', theme);
-        themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
-        themeToggle.addEventListener('click', () => {
-            theme = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
-            html.setAttribute('data-theme', theme);
-            localStorage.setItem('theme', theme);
+        
+        if (themeToggle) {
             themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
-        });
+            themeToggle.addEventListener('click', () => {
+                theme = html.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+                html.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
+            });
+        }
         // Profile form save (demo only)
         const profileForm = document.getElementById('profile-form');
         const studentName = document.getElementById('student-name');
-        profileForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            studentName.textContent = document.getElementById('profile-name').value;
-            alert('Profile updated!');
-            navDashboard.click();
+        if (profileForm && studentName) {
+            profileForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                const newName = document.getElementById('profile-name').value;
+                if (newName) {
+                    studentName.textContent = newName;
+                }
+                alert('Profile updated!');
+                navDashboard.click();
+            });
+        }
+        // Add click handlers for start assignment buttons
+        document.querySelectorAll('.start-assignment-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const assignmentTitle = this.closest('.assignment-card').querySelector('h3').textContent;
+                try {
+                    console.log('Attempting to navigate to pose detection...');
+                    window.location.href = '{% url "detection" %}?assignment=' + encodeURIComponent(assignmentTitle);
+                } catch (error) {
+                    console.error('Navigation error:', error);
+                    alert('Unable to open the practice session. Please try again.');
+                }
+            });
         });
     </script>
     {% endblock content %}

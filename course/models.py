@@ -70,7 +70,7 @@ class Course(models.Model):
         
     @property
     def lesson_count(self):
-        return len(self.lessons.all)
+        return len(self.lessons.all())
         
     def __str__(self):
         return self.title
@@ -107,6 +107,13 @@ class Enrollment(models.Model):
     
     def __str__(self):
         return f"{self.student} enrolled in {self.course}"
+    
+    @property
+    def progress(self):
+        lessons = self.course.lessons.all()
+        completed = Progress.objects.filter(student=self.student, lesson__in=lessons).count()
+        print(completed, len(lessons))
+        return int((completed/len(lessons)*100)) if lessons else 0
 
 @receiver(post_save, sender=Enrollment)
 def resultAnounced(sender, instance, created, **kwargs):
