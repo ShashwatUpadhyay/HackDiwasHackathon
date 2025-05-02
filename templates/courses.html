@@ -3,7 +3,9 @@
 {% block title %}
  Courses - KalaPathshala
 {% endblock title %}
-    
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
     
     {% block content %}
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -93,7 +95,7 @@
                                     <span>👥 {{course.enrollments.all|length}}+ Students</span>
                                     <span>⭐ 4.8</span>
                                 </div>
-                                <a href="{% url "course" course.slug %}" class="enroll-btn">Details <i class="bi bi-arrow-right"></i></a>
+                            <a href="{% url "course" course.slug %}" class="explore-btn">Details <span class="arrow">→</span></a>
                             </div>
                         </div>
                     {% endfor %}
@@ -101,40 +103,39 @@
             </div>
         </section>
 
-        <!-- Featured Instructors Section -->
-        <section class="featured-instructors">
-            <div class="instructors-container">
-                <h2>Meet Our Expert Instructors</h2>
-                <div class="instructors-grid">
-                    <!-- Instructor 1 -->
-                     {% for teacher in teachers %}
-                    <div class="instructor-card">
-                        <div class="instructor-image">
-                            <img {% if teacher.image %}
-                            src='{{teacher.image.url}}'
-                            {% else %}
-                            src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" 
-                            {% endif %} alt="Priya Sharma">
-                        </div>
-                        <div class="instructor-content">
-                            <h3>{{teacher.full_name}}</h3>
-                            <p class="instructor-specialty">{{teacher.category.name}}</p>
-                            <p class="instructor-bio">Award-winning Kathak dancer with 15+ years of teaching experience</p>
-                            <div class="instructor-stats">
-                                <div class="stat">
-                                    <span class="stat-icon">👥</span>
-                                    <span>500+ Students</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-icon">⭐</span>
-                                    <span>4.9 Rating</span>
-                                </div>
-                            </div>
-                            <a href="{% url "teacher_profile" teacher.uid %}" class="view-courses-btn">View Courses</a>
-                        </div>
+
+        <section style="margin: 0; padding: 20px; font-family: 'Inter', sans-serif; background: #f5f7fa;">
+            <!-- Container for all cards -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto;">
+                <!-- Card 1 -->
+                
+                {% for teacher in teachers %}
+                <div style="background: white; border-radius: 16px; box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08); overflow: hidden;">
+                    <div style="width: 100%; height: 200px; overflow: hidden;">
+                        <img  {% if teacher.image %}
+                        src='{{teacher.image.url}}'
+                        {% else %}
+                        src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" 
+                        {% endif %} alt="Teacher Profile" style="width: 100%; height: 100%; object-fit: cover;">
                     </div>
-                    {% endfor %}
+                    <div style="padding: 16px;">
+                        <h2 style="margin: 0 0 4px 0; font-size: 20px; font-weight: 600; color: #1a1a1a;">{{teacher.full_name}}</h2>
+                        <p style="margin: 0 0 8px 0; font-size: 14px; color: #666;">{{teacher.category.name}}</p>
+                        <p style="margin: 0 0 12px 0; font-size: 13px; color: #444; line-height: 1.4;">{{teacher.bio|truncatewords:10}}</p>
+                        <div style="display: flex; gap: 12px; margin-bottom: 12px;">
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <span style="color: #666;">👥</span>
+                                <span style="color: #666; font-size: 13px;">500+ Students</span>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 4px;">
+                                <span style="color: #666;">⭐</span>
+                                <span style="color: #666; font-size: 13px;">4.9 Rating</span>
+                            </div>
+                        </div>
+                        <a href="{% url "teacher_profile" teacher.uid %}" style="display: inline-block; text-decoration: none; color: #6d28d9; font-size: 13px; font-weight: 500;">View Courses</a>
+                    </div>
                 </div>
+                {% endfor %}
             </div>
         </section>
 

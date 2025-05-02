@@ -86,3 +86,6 @@ def invoice(request, uid):
 
 def detection(request):
     return render(request , 'dashboard/pose-detection.html')
+
+def pose_compairition(request):
+    return render(request , 'dashboard/pose-comparison.html')

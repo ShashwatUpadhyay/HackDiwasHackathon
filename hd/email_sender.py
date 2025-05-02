@@ -19,6 +19,45 @@ def verifyUser(email,uid):
                 )
     except Exception as e:
         print(e)
+        
+        
+def certified(email,instance):
+    try:
+        subject = "🎉 You're Now Certified – Congratulations!"
+        recipient = email
+        certificate_url = f"{settings.DOMAIN_NAME}certificate/verify/{instance.uid}/"
+        html_content = f"""
+        <div style="font-family: Arial, sans-serif; padding: 20px; background-color: #f9f9f9;">
+            <div style="max-width: 600px; margin: auto; background-color: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
+                <h2 style="color: #4A90E2;">Certificate of Completion</h2>
+                <p>Dear {instance.user.user.first_name},</p>
+                <p>We are pleased to inform you that you have successfully completed your course and are now officially certified. Congratulations on your achievement!</p>
+                
+                <p>You can view and download your certificate by clicking the button below:</p>
+                
+                <div style="text-align: center; margin: 30px 0;">
+                    <a href="{certificate_url}" style="padding: 12px 24px; background-color: #4A90E2; color: #fff; text-decoration: none; border-radius: 5px;">View Certificate</a>
+                </div>
+                
+                <p>If you have any questions or need assistance, feel free to contact our support team.</p>
+                
+                <p>Best regards,<br>The LMS Team</p>
+            </div>
+        </div>
+        """
+
+        send_mail(
+            subject,
+            '',  # Plain text version (optional)
+            settings.EMAIL_HOST_USER,
+            [recipient],
+            html_message=html_content,
+            fail_silently=False
+        )
+
+    except Exception as e:
+        print("Email send failed:", e)
+
     
 def course_purchased(instance):
     try:
