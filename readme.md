@@ -1,4 +1,4 @@
-qKalaPathshala a unified learning platform for extra curriculum.
+KalaPathshala a unified learning platform for extra curriculum.
 
 #create virtual environment
 
