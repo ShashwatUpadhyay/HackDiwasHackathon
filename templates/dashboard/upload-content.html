@@ -280,6 +280,8 @@ Upload Content | Kalpathsala
 
         <form class="upload-form" id="uploadForm" method='POST' enctype="multipart/form-data">
             {% csrf_token %}
+            <input type="hidden" id="uid" name="uid" value='{{ course.uid}}'>
+
             <div class="form-group">
                 <label for="title">📌 Title</label>
                 <input type="text" id="title" name="title" placeholder="Enter content title" required>
@@ -306,7 +308,7 @@ Upload Content | Kalpathsala
                 <input type="checkbox" id="freeAccess" name="freeAccess">
                 <label for="freeAccess">✅ Make this content freely available</label>
             </div>
-
+            <progress id="uploadProgress" value="0" max="100" style="width: 100%; display: none; margin-top: 1rem;"></progress>
             <button type="submit" class="submit-btn">🚀 Upload Content</button>
         </form>
     </div>
@@ -321,6 +323,50 @@ Upload Content | Kalpathsala
     </div>
 
     <script>
+            const form = document.getElementById('uploadForm');
+            const progressBar = document.getElementById('uploadProgress');
+        
+            form.addEventListener('submit', function (e) {
+                e.preventDefault();
+        
+                const formData = new FormData(form);
+                const xhr = new XMLHttpRequest();
+                console.log(formData.get('file'), formData.get('title'), formData.get('description'), formData.get('uid'));
+                xhr.open('POST', '{% url "upload_content" %}', true);  // Empty string = current URL
+                xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        
+                // Show the progress bar
+                progressBar.style.display = 'block';
+                progressBar.value = 0;
+        
+                xhr.upload.addEventListener('progress', function (e) {
+                    if (e.lengthComputable) {
+                        const percent = (e.loaded / e.total) * 100;
+                        progressBar.value = percent;
+                    }
+                });
+        
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        progressBar.value = 100;
+                        document.getElementById('successModal').style.display = 'flex';
+                        form.reset();
+                        document.getElementById('fileName').textContent = '';
+                    } else {
+                        alert("Upload failed!");
+                    }
+                };
+        
+                xhr.onerror = function () {
+                    alert("An error occurred during the upload.");
+                };
+                
+                xhr.send(formData);
+            });
+        
+        
+        
+        
         // File name display
         document.getElementById('file').addEventListener('change', function(e) {
             const fileName = e.target.files[0]?.name;

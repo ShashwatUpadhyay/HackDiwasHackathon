@@ -362,8 +362,8 @@ KalaPathshala Player
             </div>
             
             
-            {% for video in videos %}
-            <a style='text-decoration:none;' href='{% url "videoplayer" course.uid video.uid  %}'><li class="sidebar-item {% if user.student %}{% if video|completed:user.student %}text-success{% endif %}{% endif %} ">{{video.title}}</li></a>
+            {% for vdo in videos %}
+            <a style='text-decoration:none;' href='{% url "videoplayer" course.uid vdo.uid  %}'><li class="sidebar-item {% if user.student %}{% if vdo|completed:user.student %}text-success{% endif %}{% endif %} ">{{vdo.title}}</li></a>
             {% endfor %}
             
             {% if user.teacher %}
@@ -380,10 +380,11 @@ KalaPathshala Player
         <main class="main">
             <div class="player-title">{{course.title}}</div>
             <div class="video-player">
-                <video width="100%" id='main-video' controls poster="{{ course.image.url }}">
+                <video width="100%" id='main-video' muted controls poster="{{ course.image.url }}">
                     <source src="{{ video.content.url }}" type="video/mp4">
                     Your browser does not support the video tag.
                   </video>
+                  <!-- <video src="{{ video.content.url }}"></video> -->
                 <div class="video-controls-bar">
                     
                     {% if user.student %}
@@ -409,6 +410,7 @@ KalaPathshala Player
                 </div>
             </div>
             <div class="session-details">
+                <h2>{{ video.content }}</h2>
                 <h2>{{video.title}}</h2>
                 {% comment %} <p>Duration: 1:42:40</p> {% endcomment %}
                 <p>{{video.description}}.</p>
@@ -461,12 +463,17 @@ KalaPathshala Player
         });
         // Playlist logic
         const playlist = [
-            
-            {% for video in videos %}
-                 {
+         {
                 title: '{{video.title}}',
                 src: '{{video.content.url}}',
-                poster: '{{course.image.url}}'
+                poster: '{{video.image.url}}'
+         },
+            
+            {% for vdo in videos %}
+                 {
+                title: '{{vdo.title}}',
+                src: '{{vdo.content.url}}',
+                poster: '{{vdo.image.url}}'
             },
             {% endfor %}
         ];

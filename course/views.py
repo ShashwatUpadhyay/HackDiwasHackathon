@@ -1,4 +1,6 @@
 from django.shortcuts import render,get_object_or_404,redirect,HttpResponse
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 from . import models
 from django.contrib import  messages
 from django.http import HttpResponseRedirect
@@ -31,22 +33,45 @@ def course(request, slug):
 
 def upload_video(request,uid):
     course = get_object_or_404(models.Course, uid=uid)
-    if request.method == 'POST':
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-        freeAccess = request.POST.get('freeAccess')
-        file = request.FILES.get('file') 
-        print(title, description,file,freeAccess)
-        lession = models.Lesson.objects.create(course=course,content=file,description=description,title=title)
-        if freeAccess:
-            lession.is_free = True
-        lession.save()
-        messages.success(request, "Video has been uploaded!!.")
-        return redirect('videoplayer' , uid = course.uid, v_uid = lession.uid)
+    # if request.method == 'POST':
+    #     title = request.POST.get('title')
+    #     description = request.POST.get('description')
+    #     freeAccess = request.POST.get('freeAccess')
+    #     file = request.FILES.get('file') 
+    #     print(title, description,file,freeAccess)
+    #     lession = models.Lesson.objects.create(course=course,content=file,description=description,title=title)
+    #     if freeAccess:
+    #         lession.is_free = True
+    #     lession.save()
+    #     messages.success(request, "Video has been uploaded!!.")
+    #     return redirect('videoplayer' , uid = course.uid, v_uid = lession.uid)
     context={
         'course':course,
     }
     return render(request , 'dashboard/upload-content.html',context)
+
+@csrf_exempt  # Optional if you manually handle CSRF in JS
+def upload_content(request):
+    if request.method == 'POST' and request.FILES.get('file'):
+        title = request.POST.get('title')
+        uid = request.POST.get('uid')
+        description = request.POST.get('description')
+        file = request.FILES['file']
+        free_access = request.POST.get('freeAccess') == 'on'
+        print(title, uid, description, file, free_access)
+        course = get_object_or_404(models.Course, uid=uid)
+        # Save to database
+        models.Lesson.objects.create(
+            title=title,
+            description=description,
+            content=file,
+            is_free=free_access,
+            course=course
+        )
+
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+
 
 def videoplayer(request,uid, v_uid):
     course = get_object_or_404(models.Course, uid=uid)
