@@ -380,11 +380,10 @@ KalaPathshala Player
         <main class="main">
             <div class="player-title">{{course.title}}</div>
             <div class="video-player">
-                <video width="100%" id='main-video' muted controls poster="{{ course.image.url }}">
-                    <source src="{{ video.content.url }}" type="video/mp4">
-                    Your browser does not support the video tag.
-                  </video>
-                  <!-- <video src="{{ video.content.url }}"></video> -->
+                <video id="main-video" width="100%" height="auto" controls>
+                    <source src="media/videos/{{ video.uid }}/index.m3u8" type="application/x-mpegURL">
+                    Your browser does not support HTML5 video.
+                </video>
                 <div class="video-controls-bar">
                     
                     {% if user.student %}
@@ -410,14 +409,38 @@ KalaPathshala Player
                 </div>
             </div>
             <div class="session-details">
-                <h2>{{ video.content }}</h2>
+                <h2>{{ MEDIA_URL }}videos/{{ video.uid }}/index.m3u8</h2>
                 <h2>{{video.title}}</h2>
                 {% comment %} <p>Duration: 1:42:40</p> {% endcomment %}
                 <p>{{video.description}}.</p>
             </div>
         </main>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
     <script>
+
+        var video = document.getElementById('main-video');
+        var videoSrc = "/media/videos/{{ video.uid }}/index.m3u8";
+        console.log(videoSrc);
+        console.log("HLS:  ",Hls.isSupported());
+        if (Hls.isSupported()) {
+            var hls = new Hls();
+            hls.loadSource(videoSrc);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+              video.play();
+            });
+          } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = videoSrc;
+            video.addEventListener('loadedmetadata', function () {
+              video.play();
+            });
+          } else {
+            console.error("This browser doesn't support HLS playback.");
+          }
+        
+
+
         // Collapsible sidebar sections
         function toggleSidebarSection(titleEl) {
             const section = titleEl.parentElement;
@@ -435,7 +458,7 @@ KalaPathshala Player
             });
         });
         // Video controls bar logic
-        const video = document.getElementById('main-video');
+        //const video = document.getElementById('main-video');
         const speedBtn = document.getElementById('speed-btn');
         const fullscreenBtn = document.getElementById('fullscreen-btn');
         let is2x = false;
@@ -461,60 +484,7 @@ KalaPathshala Player
             localStorage.setItem('theme', theme);
             themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
         });
-        // Playlist logic
-        const playlist = [
-         {
-                title: '{{video.title}}',
-                src: '{{video.content.url}}',
-                poster: '{{video.image.url}}'
-         },
-            
-            {% for vdo in videos %}
-                 {
-                title: '{{vdo.title}}',
-                src: '{{vdo.content.url}}',
-                poster: '{{vdo.image.url}}'
-            },
-            {% endfor %}
-        ];
-        const playlistPanel = document.getElementById('playlist-panel');
-        const playlistList = playlistPanel.querySelector('.playlist-list');
-        const selectVideoBtn = document.getElementById('select-video-btn');
-        const closePlaylist = document.getElementById('close-playlist');
-        let currentVideoIdx = 0;
-        function renderPlaylist() {
-            playlistList.innerHTML = '';
-            playlist.forEach((item, idx) => {
-                const li = document.createElement('li');
-                li.className = 'playlist-item' + (idx === currentVideoIdx ? ' active' : '');
-                li.textContent = item.title;
-                li.addEventListener('click', () => {
-                    loadVideo(idx);
-                    playlistPanel.style.display = 'none';
-                });
-                playlistList.appendChild(li);
-            });
-        }
-        function loadVideo(idx) {
-            currentVideoIdx = idx;
-            video.src = playlist[idx].src;
-            video.poster = playlist[idx].poster;
-            video.load();
-            video.play();
-            renderPlaylist();
-        }
-        selectVideoBtn.addEventListener('click', () => {
-            playlistPanel.style.display = playlistPanel.style.display === 'none' ? 'block' : 'none';
-            renderPlaylist();
-        });
-        closePlaylist.addEventListener('click', () => {
-            playlistPanel.style.display = 'none';
-        });
-        // Load first video by default
-        loadVideo(0);
-        document.getElementById('add-btn').addEventListener('click', function() {
-            alert('Add new content!');
-        });
+     
 
         // Django Messages with SweetAlert2
     {% if messages %}

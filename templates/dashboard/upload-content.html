@@ -352,6 +352,11 @@ Upload Content | Kalpathsala
                         document.getElementById('successModal').style.display = 'flex';
                         form.reset();
                         document.getElementById('fileName').textContent = '';
+                        {% if course.latest_vdo_url %}
+                        window.location.href = '{% url "videoplayer" course.uid course.latest_vdo_url.uid %}';
+                        {% else %}
+                        window.location.href = '{% url "teacher_my_course" %}';
+                        {% endif %}
                     } else {
                         alert("Upload failed!");
                     }

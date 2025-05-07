@@ -4,6 +4,10 @@ from django.utils.text import slugify
 from django.db.models.signals import post_save, post_delete
 from django.dispatch import receiver
 from hd.email_sender  import course_purchased
+import os
+import subprocess
+from django.conf import settings
+
 # Create your models here.
 class CourseCategory(models.Model):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -98,6 +102,38 @@ class Lesson(models.Model):
     
     def __str__(self):
         return self.title
+
+@receiver(post_save, sender=Lesson)
+def convert_to_hls(sender, instance, **kwargs):
+    if instance.content:
+        print(instance.content.name)
+        input_path = os.path.join(settings.MEDIA_ROOT,instance.content.name)
+        output_dir = os.path.join(settings.MEDIA_ROOT, 'videos', str(instance.uid))
+        print(input_path, '\n',output_dir)
+        os.makedirs(output_dir, exist_ok=True)
+
+        output_path = os.path.join(output_dir, 'index.m3u8')
+
+        # Skip if already exists (to avoid repeated conversion)
+        if os.path.exists(output_path):
+            return
+
+        command = [
+            'ffmpeg',
+            '-i', input_path,
+            '-codec:', 'copy',
+            '-start_number', '0',
+            '-hls_time', '10',
+            '-hls_list_size', '0',
+            '-f', 'hls',
+            output_path
+        ]
+
+        try:
+            subprocess.run(command, check=True)
+        except subprocess.CalledProcessError as e:
+            print("FFmpeg Error:", e)
+
     
 class Enrollment(models.Model):
     uid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
