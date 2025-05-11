@@ -24,13 +24,14 @@ def subcategory_courses(request, slug, sub):
     cate = get_object_or_404(models.CourseCategory, slug=slug)
     subcate = get_object_or_404(models.CourseSubCategory, slug=sub)
     course = models.Course.objects.filter(is_active = True,subcategory=subcate)
-    print(course.latest_vdo_url.uid)
     return render(request,'courses-cards.html',{'courses':course,'cate':cate,'subcate':subcate})
 
 def course(request, slug):
     cour = get_object_or_404(models.Course, slug=slug)
     recomm = models.Course.objects.filter(category=cour.category).exclude(uid=cour.uid)[:4]
-    return render(request,'class-card.html',{'course':cour,'recomms':recomm})    
+    teacher_img = cour.teacher.image.url
+    print(teacher_img)
+    return render(request,'class-card.html',{'course':cour,'recomms':recomm,'teacher_img':teacher_img})    
 
 def upload_video(request,uid):
     course = get_object_or_404(models.Course, uid=uid)

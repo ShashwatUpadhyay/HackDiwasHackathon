@@ -664,7 +664,9 @@
             <div class="thumbnail-overlay">
                 <h1 class="thumbnail-title">{{course.level}} <span>•</span> {{course.title}}</h1>
                 <div class="thumbnail-subtitle">
-                    <span>👤 {{course.teacher.full_name}}</span>
+                    <span>{% if teacher_img %}
+                        <i><img style='height:30px; width:30px; border-radius:50%;' src="{{ teacher_img }}" alt=""></i>
+                        {% endif %} {{course.teacher.full_name}}</span>
                     <span>•</span>
                     <span>🏷️  {{course.subcategory.name}} {{course.category.name}}</span>
                     <span>•</span>
@@ -673,7 +675,7 @@
                 <div class="thumbnail-stats">
                     <div class="stat-item">
                         <i>⏳</i>
-                        <span>{{ course.duration }}</span>
+                        <span>{{ course.duration|default:"4 weeks" }}</span>
                     </div>
                     <div class="stat-item">
                         <i>👥</i>
@@ -691,7 +693,9 @@
             <div class="class-header">
                 <h1 class="class-title"> {{course.title}}</h1>
                 <div class="teacher-info">
-                    <div class="teacher-avatar">T</div>
+                    <div class="teacher-avatar">{% if teacher_img %}
+                        <i><img style='height:40px; width:40px; border-radius:50%;' src="{{ teacher_img }}" alt=""></i>
+                        {% endif %}</div>
                     <span>{{course.teacher.full_name}}</span>
                 </div>
             </div>
