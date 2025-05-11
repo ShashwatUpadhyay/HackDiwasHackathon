@@ -24,6 +24,7 @@ def subcategory_courses(request, slug, sub):
     cate = get_object_or_404(models.CourseCategory, slug=slug)
     subcate = get_object_or_404(models.CourseSubCategory, slug=sub)
     course = models.Course.objects.filter(is_active = True,subcategory=subcate)
+    print(course.latest_vdo_url.uid)
     return render(request,'courses-cards.html',{'courses':course,'cate':cate,'subcate':subcate})
 
 def course(request, slug):
