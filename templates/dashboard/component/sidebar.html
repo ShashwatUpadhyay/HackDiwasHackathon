@@ -1,0 +1,93 @@
+{% load review_tag %}
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<aside class="sidebar">
+    <div class="sidebar-title">
+        KalaPathshala
+    </div>
+    
+    <div class="sidebar-section">
+        <div class="sidebar-section-title" onclick="toggleSidebarSection(this)">
+            <span><i class="fas fa-book"></i> Course Videos</span>
+            <span class="arrow">&#9662;</span>
+        </div>
+        <ul class="sidebar-items">
+            {% for vdo in videos %}
+            <li class="sidebar-item {% if user.student %}{% if vdo|completed:user.student %}completed{% endif %}{% endif %}">
+                <a href="{% url 'videoplayer' course.uid vdo.uid %}" style="text-decoration:none; color:inherit; display:block;">
+                    {% if user.student %}{% if vdo|completed:user.student %}<i class="fas fa-check-circle"></i>{% else %}<i class="fas fa-play"></i>{% endif %}{% else %}<i class="fas fa-play"></i>{% endif %} {{vdo.title}}
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+    
+    {% if user.teacher and course.teacher == user.teacher %}
+    <div class="sidebar-section">
+        <div class="sidebar-section-title" onclick="toggleSidebarSection(this)">
+            <span><i class="fas fa-cog"></i> Teacher Tools</span>
+            <span class="arrow">&#9662;</span>
+        </div>
+        <ul class="sidebar-items">
+            <li class="sidebar-item">
+                <button onclick='window.location.href="{% url "upload_video" course.uid %}"' class="add-btn" title="Add new content">+ Add Video</button>
+            </li>
+        </ul>
+    </div>
+    {% endif %}
+    
+    <div class="sidebar-section collapsed">
+        <div class="sidebar-section-title" onclick="toggleSidebarSection(this)">
+            <span><i class="fas fa-info-circle"></i> Course Info</span>
+            <span class="arrow">&#9662;</span>
+        </div>
+        <ul class="sidebar-items">
+            <li class="sidebar-item">Total Videos: {{videos|length}}</li>
+            {% if user.student %}
+            <li class="sidebar-item">Progress: {{videos|length}}</li>
+            {% endif %}
+        </ul>
+    </div>
+</aside>
+
+<style>
+.sidebar-item.completed {
+    background: rgba(34, 197, 94, 0.1);
+    border-left: 3px solid #22c55e;
+}
+
+.sidebar-item.completed a {
+    color: #22c55e !important;
+}
+
+.add-btn {
+    background: #6d28d9;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    cursor: pointer;
+    width: 100%;
+    transition: background 0.2s;
+}
+
+.add-btn:hover {
+    background: #2563eb;
+}
+</style>
+
+<script>
+function toggleSidebarSection(titleEl) {
+    const section = titleEl.parentElement;
+    section.classList.toggle('collapsed');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('.sidebar-section');
+    if (sections.length > 0) {
+        sections[0].classList.remove('collapsed');
+    }
+});
+</script>

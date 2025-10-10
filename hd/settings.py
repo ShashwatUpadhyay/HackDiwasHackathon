@@ -18,7 +18,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # DOMAIN_NAME = 'http://127.0.0.1:8000/'
 
 # DOMAIN_NAME = 'https://1bw8tdbd-8000.inc1.devtunnels.ms/'
-DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
+# DOMAIN_NAME = 'https://9319j0b7-8000.inc1.devtunnels.ms/'
+DOMAIN_NAME = 'https://n4j8lz40-8000.inc1.devtunnels.ms/'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.2/howto/deployment/checklist/
@@ -136,7 +137,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_HOST_USER = 'imakemyownluck619@gmail.com'
-EMAIL_HOST_PASSWORD = 'miiu rgag ukri trjw'
+EMAIL_HOST_PASSWORD = 'vljj wzsr tyow mof'
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False
 

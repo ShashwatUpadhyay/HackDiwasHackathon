@@ -782,10 +782,11 @@
                 </div>
                 {% if user.is_authenticated %}
                     {% if course|enrolled:user %}
-                        <a href='{% if course.latest_vdo_url %}
-                        {% url "videoplayer" course.uid course.latest_vdo_url.uid %}
+                        {% if course.latest_vdo_url %}
+                            <a href='{% url "videoplayer" course.uid course.latest_vdo_url.uid %}' class="join-button">View</a>
                         {% else %}
-                        {% endif %} {% url "student_dashboard" %}' class="join-button">View</a>
+                            <a href='{% url "student_dashboard" %}' class="join-button">View</a>
+                        {% endif %}
                     {% else %}
                         <a href='{% url "makepayment" course.uid  %}' class="join-button">Join Class</a>
                     {% endif %}
@@ -833,10 +834,10 @@
                             <i>📆</i>
                             <span>Pause subscription once per month without losing access</span>
                         </li>
-                        <li>
+                        <   >
                             <i>🧘‍♀️</i>
                             <span>Free mindfulness & wellness sessions included</span>
-                        </li>
+                        </>
                         <li>
                             <i>🧾</i>
                             <span>Detailed syllabus with topic-wise breakdown</span>

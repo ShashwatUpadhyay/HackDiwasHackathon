@@ -58,10 +58,29 @@ KalaPathshala Player
             color: #666;
             cursor: pointer;
             margin-bottom: 0.2rem;
+            transition: all 0.2s ease;
         }
         .sidebar-item.active, .sidebar-item:hover {
             background: #6d28d9;
-            color: #fff;
+            color: #fff !important;
+        }
+        a.sidebar-item {
+            text-decoration: none !important;
+            color: inherit;
+            display: block;
+            position: relative;
+            z-index: 1;
+            pointer-events: auto;
+        }
+        a.sidebar-item:hover {
+            color: #fff !important;
+            text-decoration: none !important;
+        }
+        a.sidebar-item:visited {
+            color: inherit;
+        }
+        a.sidebar-item:active {
+            color: #fff !important;
         }
         .main {
             flex: 1;
@@ -322,61 +341,7 @@ KalaPathshala Player
 </head>
 <body>
     <div class="container">
-        <aside class="sidebar">
-            
-            <div class="sidebar-title">
-                KalaPathshala
-            </div>
-            <div class="sidebar-section hidden">
-                <div class="sidebar-section-title" onclick="toggleSidebarSection(this)">
-                    <span>1. Welcome learners!</span>
-                    <span class="arrow">&#9662;</span>
-                </div>
-                <ul class="sidebar-items">
-
-                    <li class="sidebar-item">Welcome Video</li>
-                    
-                  
-                        
-                </ul>
-                
-            </div>
-            <div class="sidebar-section hidden">
-                <div class="sidebar-section-title" onclick="toggleSidebarSection(this)">
-                    <span>2. Important! (Telegram Group)</span>
-                    <span class="arrow">&#9662;</span>
-                </div>
-                <ul class="sidebar-items">
-                    <li class="sidebar-item">Join Group</li>
-                </ul>
-            </div>
-            <div class="sidebar-section">
-                <div class="sidebar-section-title" onclick="toggleSidebarSection(this)">
-                    <span>3. Live Session</span>
-                    <span class="arrow">&#9662;</span>
-                </div>
-                <ul class="sidebar-items">
-                    <li class="sidebar-item">Bonus Session 1 (Orientation)</li>
-                    <li class="sidebar-item">Bonus Session 1 (Slides)</li>
-                </ul>
-            </div>
-            
-            
-            {% for vdo in videos %}
-            <a style='text-decoration:none;' href='{% url "videoplayer" course.uid vdo.uid  %}'><li class="sidebar-item {% if user.student %}{% if vdo|completed:user.student %}text-success{% endif %}{% endif %} ">{{vdo.title}}</li></a>
-            {% endfor %}
-            
-            {% if user.teacher %}
-                
-                
-            {% if course.teacher == user.teacher %}
-            <div>   
-                <button onclick='window.location.href="{% url "upload_video" course.uid %}"' class="btn btn-primary" title="Add new content">add +</button>
-            </div>
-            {% endif %}
-            {% endif %}
-
-        </aside>
+        {% include "dashboard/component/sidebar.html" %}
         <main class="main">
             <div class="player-title">{{course.title}}</div>
             <div class="video-player">
@@ -409,7 +374,7 @@ KalaPathshala Player
                 </div>
             </div>
             <div class="session-details">
-                <h2>{{ MEDIA_URL }}videos/{{ video.uid }}/index.m3u8</h2>
+                <!-- <h2>{{ MEDIA_URL }}videos/{{ video.uid }}/index.m3u8</h2> -->
                 <h2>{{video.title}}</h2>
                 {% comment %} <p>Duration: 1:42:40</p> {% endcomment %}
                 <p>{{video.description}}.</p>
