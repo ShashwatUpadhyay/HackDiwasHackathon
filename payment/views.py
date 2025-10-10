@@ -36,7 +36,9 @@ def makepayment(request,uid):
     # order id of newly created order.
     razorpay_order_id = razorpay_order['id']
     domain = request.get_host()
-    callback_url = f'{domain}payment/course/{uid}/paymenthandler/{request.user.student.uid}/'
+    protocol = request.scheme
+    callback_url = f'{protocol}://{domain}/payment/course/{uid}/paymenthandler/{request.user.student.uid}/'
+    print(callback_url)
     # we need to pass these details to frontend.
     context = {}
     context['razorpay_order_id'] = razorpay_order_id
