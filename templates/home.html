@@ -1,363 +1,858 @@
 {% extends "index.html" %}
 {% load static %}
-{% block title %}KalaPathshala - Dance • Yoga • Music{% endblock title %}
+{% block title %}KalaPathshala - Discover Your Rhythm{% endblock title %}
+
+{% block extrastyle %}
+<style>
+    
+    /* Floating animations */
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+
+    @keyframes floatReverse {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(20px); }
+    }
+
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); }
+        50% { transform: scale(1.05); }
+    }
+
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+
+    .animate-float {
+        animation: float 6s ease-in-out infinite;
+    }
+
+    .animate-float-reverse {
+        animation: floatReverse 6s ease-in-out infinite;
+    }
+
+    .animate-pulse-slow {
+        animation: pulse 4s ease-in-out infinite;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: var(--off-white);
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--violet);
+        border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--violet-dark);
+    }
+</style>
+{% endblock extrastyle %}
+
 {% block content %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="{% static 'js/script.js' %}" defer></script>
-    <div class="app">
-      
-        <!-- Bubble Background -->
-        <div class="bubble-background">
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-            <div class="bubble"></div>
-        </div>
+<!-- Background Elements -->
+<div class="fixed inset-0 overflow-hidden pointer-events-none">
+    <!-- Floating geometric shapes -->
+    <div class="absolute top-20 left-10 w-4 h-4 bg-purple-300 rounded-full animate-float opacity-60"></div>
+    <div class="absolute top-40 right-20 w-6 h-6 bg-peach-400 rounded-lg animate-float-reverse opacity-40"></div>
+    <div class="absolute top-60 left-1/4 w-3 h-3 bg-yellow-300 rounded-full animate-pulse-slow opacity-50"></div>
+    <div class="absolute top-80 right-1/3 w-5 h-5 bg-purple-200 rotate-45 animate-float opacity-30"></div>
+    <div class="absolute bottom-40 left-20 w-4 h-4 bg-peach-300 rounded-full animate-float-reverse opacity-60"></div>
+    <div class="absolute bottom-60 right-10 w-3 h-3 bg-yellow-400 rounded-full animate-pulse-slow opacity-50"></div>
+    
+    <!-- Gradient overlays -->
+    <div class="absolute top-0 right-0 w-96 h-96 bg-gradient-to-bl from-purple-100 to-transparent rounded-full blur-3xl opacity-30"></div>
+    <div class="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-peach-100 to-transparent rounded-full blur-3xl opacity-30"></div>
+</div>
 
-        <!-- Flowing Background Animation -->
-        <div class="flowing-background">
-            <div class="flow-layer layer-1">
-                <div class="tiny-circle"></div>
-                <div class="tiny-circle"></div>
-                <div class="tiny-circle"></div>
-                <div class="tiny-circle"></div>
-                <div class="tiny-circle"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="dot"></div>
-                <div class="cross"></div>
-                <div class="cross"></div>
-                <div class="cross"></div>
-            </div>
-            <div class="flow-layer layer-2">
-                <div class="tiny-square"></div>
-                <div class="tiny-square"></div>
-                <div class="tiny-square"></div>
-                <div class="tiny-square"></div>
-                <div class="tiny-square"></div>
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="ring"></div>
-                <div class="plus"></div>
-                <div class="plus"></div>
-                <div class="plus"></div>
-            </div>
-        </div>
-
-        <!-- Hero Section -->
-        <section class="hero">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <h1>Discover Your<br>Rhythm</h1>
-                    <p class="subtitle">Join our vibrant community of dance, yoga, and music enthusiasts. Learn from
-                        expert instructors in a supportive environment.</p>
-                    <div class="hero-buttons">
-                        <a href="{% url 'exploreTeacher'  %}" class="explore-btn teacher">
-                            <span class="icon">👨‍🏫</span>
-                            Explore as Teacher
-                        </a>
-                        <a href="{% url 'explore' %}" class="explore-btn student">
-                            <span class="icon">👨‍🎓</span>
-                            Explore as Student
-                        </a>
+<!-- Hero Section -->
+<section class="relative min-h-screen flex items-center justify-center pt-16 overflow-hidden">
+    <!-- Hero Background -->
+    <div class="absolute inset-0 bg-gradient-to-br from-purple-50 via-white to-peach-50"></div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+        <div class="grid lg:grid-cols-2 gap-12 items-center">
+            <!-- Hero Content -->
+            <div class="text-center lg:text-left">
+                <div class="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 to-peach-100 text-purple-800 text-sm font-medium mb-6">
+                    <span class="w-2 h-2 bg-purple-500 rounded-full mr-2 animate-pulse"></span>
+                    Join 10,000+ passionate learners
+                </div>
+                
+                <h1 class="text-4xl sm:text-5xl lg:text-6xl font-bold text-gray-900 leading-tight mb-6">
+                    Discover Your
+                    <span class="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+                        Rhythm
+                    </span>
+                </h1>
+                
+                <p class="text-xl text-gray-600 mb-8 max-w-2xl mx-auto lg:mx-0">
+                    Master the art of dance, yoga, and music with world-class instructors. 
+                    Join our vibrant community and transform your passion into mastery.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                    <a href="{% url 'explore' %}" class="group bg-gradient-to-r from-purple-600 to-purple-700 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                        <span class="flex items-center justify-center">
+                            Start Learning
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                            </svg>
+                        </span>
+                    </a>
+                    
+                    <a href="{% url 'exploreTeacher' %}" class="group bg-white text-purple-700 px-8 py-4 rounded-xl text-lg font-semibold border-2 border-purple-200 hover:border-purple-300 hover:bg-purple-50 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                        <span class="flex items-center justify-center">
+                            Teach with Us
+                            <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                            </svg>
+                        </span>
+                    </a>
+                </div>
+                
+                <!-- Stats -->
+                <div class="grid grid-cols-3 gap-8 mt-12 max-w-md mx-auto lg:mx-0">
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-purple-600">10K+</div>
+                        <div class="text-sm text-gray-600">Students</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-purple-600">500+</div>
+                        <div class="text-sm text-gray-600">Courses</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="text-2xl font-bold text-purple-600">50+</div>
+                        <div class="text-sm text-gray-600">Instructors</div>
                     </div>
                 </div>
-                <div class="hero-image">
-                    <div class="image-container">
-                        <img src="https://images.unsplash.com/photo-1545128485-c400e7702796?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80"
-                            alt="Dance Performance">
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Testimonial Section -->
-        <section class="testimonial">
-            <div class="testimonial-content reveal">
-                <h2>Transform Your Life Through Artistic Expression</h2>
-                <div class="testimonial-author">
-                    <p>live your passion every day</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Testimonials Section -->
-        <section class="testimonials-section">
-            <!-- Floating Animation Container -->
-            <div class="floating-circles">
-                <div class="circle c1"></div>
-                <div class="circle c2"></div>
-                <div class="circle c3"></div>
-                <div class="circle c4"></div>
-                <div class="circle c5"></div>
-                <div class="circle c6"></div>
-                <div class="circle c7"></div>
-                <div class="circle c8"></div>
-                <div class="oval"></div>
             </div>
             
-            <h2>What Our Community Says</h2>
-            <div class="testimonials-carousel">
-                <div class="testimonials-track">
-                    <!-- Student Testimonial 1 -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-image">
-                            <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Student">
-                            <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
+            <!-- Hero Image -->
+            <div class="relative">
+                <div class="relative z-10">
+                    <img src="https://images.unsplash.com/photo-1545128485-c400e7702796?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" 
+                         alt="Dance Performance" 
+                         class="rounded-3xl shadow-2xl w-full h-auto">
+                </div>
+                
+                <!-- Floating Cards -->
+                <div class="absolute -top-4 -left-4 bg-white rounded-2xl p-4 shadow-xl animate-float z-20">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-r from-purple-500 to-purple-600 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                         </div>
-                        <div class="testimonial-content">
-                            <p>"KalaPathshala transformed my dance journey. The expert instructors and supportive community helped me master Kathak in just 6 months!"</p>
-                            <div class="testimonial-author">
-                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Priya Sharma">
-                                <div class="testimonial-author-info">
-                                    <h4>Priya Sharma</h4>
-                                    <span>Kathak Student</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Student Testimonial 2 -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-image">
-                            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Student">
-                            <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
-                        </div>
-                        <div class="testimonial-content">
-                            <p>"The structured learning approach and expert guidance helped me master Carnatic vocal techniques. Now I perform professionally!"</p>
-                            <div class="testimonial-author">
-                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Ananya Iyer">
-                                <div class="testimonial-author-info">
-                                    <h4>Ananya Iyer</h4>
-                                    <span>Carnatic Music Student</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Student Testimonial 3 -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-image">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" alt="Student">
-                            <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
-                        </div>
-                        <div class="testimonial-content">
-                            <p>"Started with basic Hatha yoga, now teaching advanced classes! The platform's resources are incredible."</p>
-                            <div class="testimonial-author">
-                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" alt="Deepika Sharma">
-                                <div class="testimonial-author-info">
-                                    <h4>Deepika Sharma</h4>
-                                    <span>Hatha Yoga Student</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Student Testimonial 4 -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-image">
-                            <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Student">
-                            <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
-                        </div>
-                        <div class="testimonial-content">
-                            <p>"The meditation techniques helped me find balance in my busy life. Highly recommended!"</p>
-                            <div class="testimonial-author">
-                                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" alt="Rahul Verma">
-                                <div class="testimonial-author-info">
-                                    <h4>Rahul Verma</h4>
-                                    <span>Meditation Student</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Student Testimonial 5 -->
-                    <div class="testimonial-card">
-                        <div class="testimonial-image">
-                            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" alt="Student">
-                            <div class="testimonial-rating">⭐⭐⭐⭐⭐</div>
-                        </div>
-                        <div class="testimonial-content">
-                            <p>"The tabla lessons are amazing! I've learned so much in such a short time."</p>
-                            <div class="testimonial-author">
-                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" alt="Arjun Mehta">
-                                <div class="testimonial-author-info">
-                                    <h4>Arjun Mehta</h4>
-                                    <span>Tabla Student</span>
-                                </div>
-                            </div>
+                        <div>
+                            <div class="text-sm font-semibold text-gray-900">Live Sessions</div>
+                            <div class="text-xs text-gray-600">Daily at 7 PM</div>
                         </div>
                     </div>
                 </div>
-                <div class="carousel-controls">
-                    <button class="carousel-button prev" aria-label="Previous testimonial">←</button>
-                    <button class="carousel-button next" aria-label="Next testimonial">→</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- Features Section -->
-        <section class="categories-section">
-            <div class="pattern-bg"></div>
-            <div class="floating-circles">
-                <div class="floating-circle circle-1"></div>
-                <div class="floating-circle circle-2"></div>
-                <div class="floating-circle circle-3"></div>
-            </div>
-            <div class="categories-container">
-                <div class="categories-grid">
-                    <!-- Dance Category -->
-                     {% if cate %}
-                    {% for cat in cate %}
-                    <div class="category-card">
-                        <div class="category-image">
-                            <img src="{{cat.image.url}}" alt="Dance">
+                
+                <div class="absolute -bottom-4 -right-4 bg-white rounded-2xl p-4 shadow-xl animate-float-reverse z-20">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-gradient-to-r from-yellow-400 to-yellow-500 rounded-full flex items-center justify-center">
+                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
                         </div>
-                        <div class="category-content">
-                            {% comment %} <div class="category-icon">💃</div> {% endcomment %}
-                            <h3 class="category-title">{{cat.name}}</h3>
-                            <p class="category-description">{{cat.description}}</p>
-                            <div class="category-stats">
-                                <div class="stat">
-                                    <span class="stat-icon">👥</span>
-                                    <span>2000+ Students</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="stat-icon">📚</span>
-                                    <span>50+ Courses</span>
-                                </div>
-                            </div>
-                            <button onclick="window.location.href='{% url 'cate_courses' cat.slug %}'" class="explore-btn">
-                                Explore {{cat.name}}
-                                <span class="arrow">→</span>
-                            </button>
+                        <div>
+                            <div class="text-sm font-semibold text-gray-900">Certified</div>
+                            <div class="text-xs text-gray-600">Completion Badges</div>
                         </div>
                     </div>
-                    {% endfor %}
-                    {% else %}
-                    <div class="alert alert-primary" role="alert">
-                        No categories available at the moment.
-                      </div>
-                    {% endif %}
                 </div>
             </div>
-        </section>
-
-        
+        </div>
     </div>
+</section>
 
-    <script>
-        // Theme Toggle Functionality
-        const themeToggle = document.querySelector('.theme-toggle');
-        const html = document.documentElement;
-        const themeIcon = themeToggle.querySelector('svg');
+<!-- Categories Section -->
+<section class="py-20 bg-gradient-to-br from-purple-50 to-peach-50 relative overflow-hidden">
+    <!-- Background Elements -->
+    <div class="absolute inset-0">
+        <div class="absolute top-20 left-20 w-32 h-32 bg-purple-200 rounded-full blur-3xl opacity-30"></div>
+        <div class="absolute bottom-20 right-20 w-40 h-40 bg-peach-200 rounded-full blur-3xl opacity-30"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 to-peach-100 text-purple-800 text-sm font-medium mb-6">
+                <span class="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                Explore Our Art Forms
+            </div>
+            <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+                Master Your
+                <span class="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+                    Passion
+                </span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Dive deep into diverse art forms with expert instructors. From classical dance to modern yoga, 
+                discover your creative potential.
+            </p>
+        </div>
 
-        // Check for saved theme preference
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        html.setAttribute('data-theme', savedTheme);
-        updateThemeIcon(savedTheme);
+        <!-- Categories Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {% if cate %}
+                {% for cat in cate %}
+                <div class="group bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-500 overflow-hidden transform hover:-translate-y-2">
+                    <!-- Category Image -->
+                    <div class="relative h-48 overflow-hidden">
+                        <img src="{{cat.image.url}}" alt="{{cat.name}}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent"></div>
+                        <div class="absolute top-4 left-4">
+                            <div class="bg-white/90 backdrop-blur-sm rounded-full p-2">
+                                {% if 'dance' in cat.name|lower %}
+                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.828 14.828a4 4 0 01-5.656 0M9 10h1m4 0h1m-6 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                {% elif 'yoga' in cat.name|lower %}
+                                    <svg class="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                                    </svg>
+                                {% elif 'music' in cat.name|lower %}
+                                    <svg class="w-6 h-6 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3" />
+                                    </svg>
+                                {% elif 'cooking' in cat.name|lower %}
+                                    <svg class="w-6 h-6 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                {% elif 'fitness' in cat.name|lower %}
+                                    <svg class="w-6 h-6 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                {% elif 'painting' in cat.name|lower %}
+                                    <svg class="w-6 h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zM21 5a2 2 0 00-2-2h-4a2 2 0 00-2 2v12a4 4 0 004 4h4a2 2 0 002-2V5z" />
+                                    </svg>
+                                {% else %}
+                                    <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                                    </svg>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="absolute bottom-4 right-4">
+                            <div class="bg-white/90 backdrop-blur-sm rounded-full px-3 py-1">
+                                <span class="text-sm font-semibold text-gray-800">Popular</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Category Content -->
+                    <div class="p-6">
+                        <h3 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-purple-600 transition-colors">
+                            {{cat.name}}
+                        </h3>
+                        <p class="text-gray-600 mb-4 line-clamp-2">
+                            {{cat.description}}
+                        </p>
+                        
+                        <!-- Stats -->
+                        <div class="flex items-center justify-between mb-6">
+                            <div class="flex items-center space-x-4">
+                                <div class="flex items-center space-x-1">
+                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+                                    </svg>
+                                    <span class="text-sm text-gray-600">2K+</span>
+                                </div>
+                                <div class="flex items-center space-x-1">
+                                    <svg class="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                                    </svg>
+                                    <span class="text-sm text-gray-600">50+</span>
+                                </div>
+                            </div>
+                            <div class="flex items-center">
+                                <div class="flex text-yellow-400">
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                    </svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                    </svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                    </svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                    </svg>
+                                    <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20">
+                                        <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                    </svg>
+                                </div>
+                                <span class="ml-1 text-sm text-gray-600">4.9</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Explore Button -->
+                        <button onclick="window.location.href='{% url 'cate_courses' cat.slug %}'" class="w-full bg-gradient-to-r from-purple-600 to-purple-700 text-white py-3 px-6 rounded-xl font-semibold hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5">
+                            <span class="flex items-center justify-center">
+                                Explore {{cat.name}}
+                                <svg class="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                                </svg>
+                            </span>
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="col-span-full text-center py-12">
+                    <div class="bg-white rounded-2xl p-8 shadow-lg max-w-md mx-auto">
+                        <svg class="w-16 h-16 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">No Categories Available</h3>
+                        <p class="text-gray-600">We're working on adding amazing content. Check back soon!</p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
 
-        themeToggle.addEventListener('click', () => {
-            const currentTheme = html.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+<!-- Testimonials Section -->
+<section class="py-20 bg-white relative overflow-hidden">
+    <!-- Background Elements -->
+    <div class="absolute inset-0">
+        <div class="absolute top-20 right-20 w-32 h-32 bg-purple-100 rounded-full blur-3xl opacity-50"></div>
+        <div class="absolute bottom-20 left-20 w-40 h-40 bg-peach-100 rounded-full blur-3xl opacity-50"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r from-purple-100 to-peach-100 text-purple-800 text-sm font-medium mb-6">
+                <span class="w-2 h-2 bg-purple-500 rounded-full mr-2"></span>
+                Student Success Stories
+            </div>
+            <h2 class="text-4xl sm:text-5xl font-bold text-gray-900 mb-6">
+                What Our Community
+                <span class="bg-gradient-to-r from-purple-600 to-purple-800 bg-clip-text text-transparent">
+                    Says
+                </span>
+            </h2>
+            <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                Real stories from real students who transformed their lives through art and creativity.
+            </p>
+        </div>
+
+        <!-- Testimonials Carousel -->
+        <div class="relative">
+            <div class="testimonials-container overflow-hidden">
+                <div class="testimonials-track flex transition-transform duration-500 ease-in-out" id="testimonials-track">
+                    <!-- Testimonial 1 -->
+                    <div class="testimonial-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-4">
+                        <div class="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 h-full">
+                            <div class="flex items-center mb-6">
+                                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" 
+                                     alt="Priya Sharma" 
+                                     class="w-16 h-16 rounded-full object-cover mr-4">
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900">Priya Sharma</h4>
+                                    <p class="text-gray-600">Kathak Student</p>
+                                </div>
+                            </div>
+                            <div class="flex text-yellow-400 mb-4">
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 italic mb-6">
+                                "KalaPathshala transformed my dance journey. The expert instructors and supportive community helped me master Kathak in just 6 months!"
+                            </p>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                Completed 3 months ago
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 2 -->
+                    <div class="testimonial-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-4">
+                        <div class="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 h-full">
+                            <div class="flex items-center mb-6">
+                                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" 
+                                     alt="Ananya Iyer" 
+                                     class="w-16 h-16 rounded-full object-cover mr-4">
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900">Ananya Iyer</h4>
+                                    <p class="text-gray-600">Carnatic Music Student</p>
+                                </div>
+                            </div>
+                            <div class="flex text-yellow-400 mb-4">
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 italic mb-6">
+                                "The structured learning approach and expert guidance helped me master Carnatic vocal techniques. Now I perform professionally!"
+                            </p>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                Completed 5 months ago
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 3 -->
+                    <div class="testimonial-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-4">
+                        <div class="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 h-full">
+                            <div class="flex items-center mb-6">
+                                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=688&q=80" 
+                                     alt="Deepika Sharma" 
+                                     class="w-16 h-16 rounded-full object-cover mr-4">
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900">Deepika Sharma</h4>
+                                    <p class="text-gray-600">Hatha Yoga Student</p>
+                                </div>
+                            </div>
+                            <div class="flex text-yellow-400 mb-4">
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 italic mb-6">
+                                "Started with basic Hatha yoga, now teaching advanced classes! The platform's resources are incredible."
+                            </p>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                Completed 8 months ago
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 4 -->
+                    <div class="testimonial-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-4">
+                        <div class="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 h-full">
+                            <div class="flex items-center mb-6">
+                                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" 
+                                     alt="Rahul Verma" 
+                                     class="w-16 h-16 rounded-full object-cover mr-4">
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900">Rahul Verma</h4>
+                                    <p class="text-gray-600">Meditation Student</p>
+                                </div>
+                            </div>
+                            <div class="flex text-yellow-400 mb-4">
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 italic mb-6">
+                                "The meditation techniques helped me find balance in my busy life. Highly recommended!"
+                            </p>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                Completed 2 months ago
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Testimonial 5 -->
+                    <div class="testimonial-slide flex-shrink-0 w-full md:w-1/2 lg:w-1/3 px-4">
+                        <div class="bg-white rounded-3xl shadow-lg hover:shadow-2xl transition-all duration-300 p-8 h-full">
+                            <div class="flex items-center mb-6">
+                                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=687&q=80" 
+                                     alt="Arjun Mehta" 
+                                     class="w-16 h-16 rounded-full object-cover mr-4">
+                                <div>
+                                    <h4 class="text-lg font-semibold text-gray-900">Arjun Mehta</h4>
+                                    <p class="text-gray-600">Tabla Student</p>
+                                </div>
+                            </div>
+                            <div class="flex text-yellow-400 mb-4">
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                                <svg class="w-5 h-5 fill-current" viewBox="0 0 20 20">
+                                    <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/>
+                                </svg>
+                            </div>
+                            <p class="text-gray-700 italic mb-6">
+                                "The tabla lessons are amazing! I've learned so much in such a short time. The instructors are world-class."
+                            </p>
+                            <div class="flex items-center text-sm text-gray-500">
+                                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                </svg>
+                                Completed 1 month ago
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
             
-            html.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateThemeIcon(newTheme);
-        });
+            <!-- Carousel Controls -->
+            <div class="flex justify-center mt-8 space-x-4">
+                <button id="testimonials-prev" class="p-3 rounded-full bg-white shadow-lg hover:shadow-xl text-purple-600 hover:bg-purple-50 transition-all duration-300">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button id="testimonials-next" class="p-3 rounded-full bg-white shadow-lg hover:shadow-xl text-purple-600 hover:bg-purple-50 transition-all duration-300">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
 
-        function updateThemeIcon(theme) {
-            if (theme === 'dark') {
-                themeIcon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                `;
-            } else {
-                themeIcon.innerHTML = `
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
-                `;
+<!-- Community Section -->
+<section class="py-20 bg-gradient-to-br from-purple-600 via-purple-700 to-purple-800 relative overflow-hidden">
+    <!-- Background Elements -->
+    <div class="absolute inset-0">
+        <div class="absolute top-10 left-10 w-32 h-32 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute bottom-10 right-10 w-40 h-40 bg-white/10 rounded-full blur-3xl"></div>
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/5 rounded-full blur-3xl"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="text-center">
+            <h2 class="text-4xl sm:text-5xl font-bold text-white mb-6">
+                Join Our Vibrant
+                <span class="bg-gradient-to-r from-yellow-300 to-yellow-400 bg-clip-text text-transparent">
+                    Community
+                </span>
+            </h2>
+            <p class="text-xl text-purple-100 mb-12 max-w-3xl mx-auto">
+                Connect with fellow artists, share your journey, and get inspired by our global community of passionate learners.
+            </p>
+            
+            <!-- Social Links -->
+            <div class="flex flex-wrap justify-center gap-6 mb-12">
+                <a href="#" class="group bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-pink-500 to-purple-600 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.174-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.957 1.406-5.957s-.359-.72-.359-1.781c0-1.663.967-2.911 2.168-2.911 1.024 0 1.518.769 1.518 1.688 0 1.029-.653 2.567-.992 3.992-.285 1.193.6 2.165 1.775 2.165 2.128 0 3.768-2.245 3.768-5.487 0-2.861-2.063-4.869-5.008-4.869-3.41 0-5.409 2.562-5.409 5.199 0 1.033.394 2.143.889 2.741.099.12.112.225.085.345-.09.375-.293 1.199-.334 1.363-.053.225-.172.271-.402.165-1.495-.69-2.433-2.878-2.433-4.646 0-3.776 2.748-7.252 7.92-7.252 4.158 0 7.392 2.967 7.392 6.923 0 4.135-2.607 7.462-6.233 7.462-1.214 0-2.357-.629-2.75-1.378l-.748 2.853c-.271 1.043-1.002 2.35-1.492 3.146C9.57 23.812 10.763 24.009 12.017 24.009c6.624 0 11.99-5.367 11.99-11.988C24.007 5.367 18.641.001 12.017.001z"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-white font-semibold">Instagram</div>
+                            <div class="text-purple-200 text-sm">@kalapathshala</div>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="#" class="group bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-red-500 to-red-600 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-white font-semibold">YouTube</div>
+                            <div class="text-purple-200 text-sm">KalaPathshala</div>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="#" class="group bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M24 4.557c-.883.392-1.832.656-2.828.775 1.017-.609 1.798-1.574 2.165-2.724-.951.564-2.005.974-3.127 1.195-.897-.957-2.178-1.555-3.594-1.555-3.179 0-5.515 2.966-4.797 6.045-4.091-.205-7.719-2.165-10.148-5.144-1.29 2.213-.669 5.108 1.523 6.574-.806-.026-1.566-.247-2.229-.616-.054 2.281 1.581 4.415 3.949 4.89-.693.188-1.452.232-2.224.084.626 1.956 2.444 3.379 4.6 3.419-2.07 1.623-4.678 2.348-7.29 2.04 2.179 1.397 4.768 2.212 7.548 2.212 9.142 0 14.307-7.721 13.995-14.646.962-.695 1.797-1.562 2.457-2.549z"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-white font-semibold">Twitter</div>
+                            <div class="text-purple-200 text-sm">@kalapathshala</div>
+                        </div>
+                    </div>
+                </a>
+                
+                <a href="#" class="group bg-white/10 backdrop-blur-sm rounded-2xl p-6 hover:bg-white/20 transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-12 h-12 bg-gradient-to-r from-blue-600 to-blue-700 rounded-xl flex items-center justify-center">
+                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
+                                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                            </svg>
+                        </div>
+                        <div class="text-left">
+                            <div class="text-white font-semibold">LinkedIn</div>
+                            <div class="text-purple-200 text-sm">KalaPathshala</div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            
+            <!-- CTA Button -->
+            <a href="{% url 'explore' %}" class="inline-flex items-center px-8 py-4 bg-gradient-to-r from-yellow-400 to-yellow-500 text-purple-900 rounded-2xl text-lg font-semibold hover:from-yellow-500 hover:to-yellow-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                <span>Start Your Journey Today</span>
+                <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+                </svg>
+            </a>
+        </div>
+    </div>
+</section>
+
+
+<script>
+    // Mobile Menu Toggle
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    mobileMenuButton.addEventListener('click', () => {
+        mobileMenu.classList.toggle('hidden');
+    });
+
+    // Theme Toggle Functionality
+    const themeToggle = document.getElementById('theme-toggle');
+    const html = document.documentElement;
+    const themeIcon = themeToggle.querySelector('svg');
+
+    // Check for saved theme preference
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    html.setAttribute('data-theme', savedTheme);
+    updateThemeIcon(savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+        updateThemeIcon(newTheme);
+    });
+
+    function updateThemeIcon(theme) {
+        if (theme === 'dark') {
+            themeIcon.innerHTML = `
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
+            `;
+        } else {
+            themeIcon.innerHTML = `
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
+            `;
+        }
+    }
+
+    // Testimonials Carousel
+    const testimonialsTrack = document.getElementById('testimonials-track');
+    const testimonialsPrev = document.getElementById('testimonials-prev');
+    const testimonialsNext = document.getElementById('testimonials-next');
+    let currentTestimonial = 0;
+    const testimonials = document.querySelectorAll('.testimonial-slide');
+    const totalTestimonials = testimonials.length;
+
+    function updateTestimonialsCarousel() {
+        const slideWidth = 100 / 3; // Show 3 slides at once on desktop
+        const translateX = -(currentTestimonial * slideWidth);
+        testimonialsTrack.style.transform = `translateX(${translateX}%)`;
+    }
+
+    testimonialsPrev.addEventListener('click', () => {
+        currentTestimonial = Math.max(0, currentTestimonial - 1);
+        updateTestimonialsCarousel();
+    });
+
+    testimonialsNext.addEventListener('click', () => {
+        currentTestimonial = Math.min(totalTestimonials - 3, currentTestimonial + 1);
+        updateTestimonialsCarousel();
+    });
+
+    // Auto-scroll testimonials every 5 seconds
+    setInterval(() => {
+        if (currentTestimonial >= totalTestimonials - 3) {
+            currentTestimonial = 0;
+        } else {
+            currentTestimonial++;
+        }
+        updateTestimonialsCarousel();
+    }, 5000);
+
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
             }
-        }
-
-        // Reveal elements on scroll
-        function reveal() {
-            const reveals = document.querySelectorAll('.reveal, .reveal-left, .reveal-right');
-
-            reveals.forEach(element => {
-                const windowHeight = window.innerHeight;
-                const elementTop = element.getBoundingClientRect().top;
-                const elementVisible = 150;
-
-                if (elementTop < windowHeight - elementVisible) {
-                    element.classList.add('active');
-                }
-            });
-        }
-
-        // Add scroll event listener
-        window.addEventListener('scroll', reveal);
-
-        // Trigger reveal on initial load
-        reveal();
-
-        // Testimonials Carousel
-        const track = document.querySelector('.testimonials-track');
-        const prevButton = document.querySelector('.carousel-button.prev');
-        const nextButton = document.querySelector('.carousel-button.next');
-        let currentPosition = 0;
-        const cardWidth = 300; // Width of each card including gap
-        const cardsToShow = 3; // Number of cards visible at once
-
-        function updateCarousel() {
-            track.style.transform = `translateX(${currentPosition}px)`;
-        }
-
-        prevButton.addEventListener('click', () => {
-            currentPosition = Math.min(currentPosition + cardWidth, 0);
-            updateCarousel();
         });
+    });
 
-        nextButton.addEventListener('click', () => {
-            const maxPosition = -(cardWidth * (track.children.length - cardsToShow));
-            currentPosition = Math.max(currentPosition - cardWidth, maxPosition);
-            updateCarousel();
-        });
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
 
-        // Auto-scroll every 5 seconds
-        setInterval(() => {
-            const maxPosition = -(cardWidth * (track.children.length - cardsToShow));
-            if (currentPosition <= maxPosition) {
-                currentPosition = 0;
-            } else {
-                currentPosition -= cardWidth;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-fade-in');
             }
-            updateCarousel();
-        }, 5000);
+        });
+    }, observerOptions);
 
+    // Observe elements for animation
+    document.querySelectorAll('.category-card, .testimonial-slide').forEach(el => {
+        observer.observe(el);
+    });
 
-        // Django Messages with SweetAlert2
-        {% if messages %}
-        {% for message in messages %}
-        Swal.fire({
-            toast: true, // Make it a toast notification
-            position: 'top-end',
-            icon: '{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}',
-            title: "{{ message|escapejs }}", // Escape JS characters in message
-            showConfirmButton: false,
-            timer: 3500, // Show for 3.5 seconds
-            timerProgressBar: true,
-            didOpen: (toast) => {
+    // Django Messages with SweetAlert2
+    {% if messages %}
+    {% for message in messages %}
+    Swal.fire({
+        toast: true,
+        position: 'top-end',
+        icon: '{% if message.tags == 'error' %}error{% elif message.tags == 'success' %}success{% elif message.tags == 'warning' %}warning{% else %}info{% endif %}',
+        title: "{{ message|escapejs }}",
+        showConfirmButton: false,
+        timer: 3500,
+        timerProgressBar: true,
+        didOpen: (toast) => {
             toast.addEventListener('mouseenter', Swal.stopTimer)
             toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-        });
-        {% endfor %}
-        {% endif %}
-    </script>
-    {% endblock content %}
+        }
+    });
+    {% endfor %}
+    {% endif %}
+</script>
+
+<style>
+    /* Additional animations */
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .animate-fade-in {
+        animation: fadeIn 0.6s ease-out forwards;
+    }
+
+    /* Line clamp utility */
+    .line-clamp-2 {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    /* Dark theme styles */
+    [data-theme="dark"] {
+        --bg-color: #1a1a1a;
+        --text-color: #ffffff;
+        --card-bg: #2a2a2a;
+    }
+
+    [data-theme="dark"] body {
+        background-color: var(--bg-color);
+        color: var(--text-color);
+    }
+
+    [data-theme="dark"] .bg-white {
+        background-color: var(--card-bg) !important;
+    }
+
+    [data-theme="dark"] .text-gray-900 {
+        color: var(--text-color) !important;
+    }
+
+    [data-theme="dark"] .text-gray-600 {
+        color: #a0a0a0 !important;
+    }
+
+    [data-theme="dark"] .text-gray-700 {
+        color: #c0c0c0 !important;
+    }
+</style>
+
+{% endblock content %}
