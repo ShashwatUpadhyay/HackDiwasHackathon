@@ -26,6 +26,7 @@ urlpatterns = [
     path('courses/', include('course.urls')),
     path('payment/', include('payment.urls')),
     path('certificate/', include('certificate.urls')),
+    path('', include('chatbot.urls')),
 ]
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

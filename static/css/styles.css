@@ -150,6 +150,47 @@ body {
     border-bottom: 1px solid rgba(109, 40, 217, 0.1);
 }
 
+/* Ensure navbar collapse is always visible on desktop */
+@media (min-width: 992px) {
+    .navbar-collapse {
+        display: flex !important;
+    }
+    
+    .navbar-collapse.show {
+        display: flex !important;
+    }
+    
+    .navbar-collapse.collapse {
+        display: flex !important;
+    }
+}
+
+/* Force navbar content to be visible */
+.navbar-collapse.show {
+    display: flex !important;
+}
+
+/* Ensure navbar buttons are always visible */
+.navbar .btn {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    position: relative !important;
+    z-index: 10 !important;
+}
+
+.navbar .navbar-nav {
+    display: flex !important;
+    align-items: center !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.navbar .nav-item {
+    display: flex !important;
+    align-items: center !important;
+}
+
 .nav-content {
     max-width: 1200px;
     margin: 0 auto;
