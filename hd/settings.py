@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'course',
     'payment',
     'certificate',
+    'chatbot'
 ]
 
 MIDDLEWARE = [
@@ -148,3 +149,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 RAZOR_KEY_ID = 'rzp_test_NY17O0pSjRmrGP'
 RAZOR_KEY_SECRET = '2prM7GP0jLhhJeXb5Nlw8Ilg'
+
+# Gemini API Configuration
+GEMINI_API_KEY = "AIzaSyBlQjtNAQblwQ3Az4jYG4hCmEbQhzfHqF4"
+
+
+
+SESSION_COOKIE_AGE = 300  
+SESSION_SAVE_EVERY_REQUEST = True

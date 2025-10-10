@@ -1,37 +1,29 @@
 <!-- Bootstrap Navbar -->
-<nav class="navbar navbar-expand-lg fixed-top shadow-sm" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(109, 40, 217, 0.1);">
-    <div class="container">
+<nav class="navbar navbar-expand-lg navbar-light fixed-top" style="background: rgba(255,255,255,0.95); backdrop-filter: blur(10px); border-bottom: 1px solid rgba(109, 40, 217, 0.1); z-index: 1050;">
+    <div class="container-fluid">
       <!-- Logo -->
-      <a class="navbar-brand fw-bold" href="{% url "home" %}" style="background: linear-gradient(135deg, #6D28D9 0%, #1E40AF 100%);
+      <a class="navbar-brand fw-bold" href="{% url 'home' %}" style="background: linear-gradient(135deg, #6D28D9 0%, #1E40AF 100%);
         -webkit-background-clip: text;
+        background-clip: text;
         -webkit-text-fill-color: transparent;
         font-size: 1.5rem;">
         KalaPathshala
       </a>
   
       <!-- Toggler for mobile -->
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="true" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
   
       <!-- Navbar links -->
-      <div class="collapse navbar-collapse" id="navbarContent">
-        <!-- Centered Search Bar -->
-        <div class="mx-auto my-2 my-lg-0 d-none d-lg-block" style="max-width: 400px; width: 100%;">
-          <div class="input-group">
-            <span class="input-group-text bg-transparent border-0" style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #4B5563;">
-              <i class="bi bi-search"></i>
-            </span>
-            <input type="text" class="form-control rounded-pill ps-5" placeholder="Search classes, instructors, or styles..." style="background: rgba(109,40,217,0.05); border: 1px solid rgba(109,40,217,0.2);">
-          </div>
-        </div>
+
   
         <!-- Right side buttons -->
-        <ul class="navbar-nav ms-auto align-items-center gap-2">
+        <ul class="navbar-nav ms-auto align-items-center">
           <!-- Theme Toggle Button -->
-          <li class="nav-item">
-            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <li class="nav-item me-2">
+            <button class="btn btn-outline-secondary rounded-circle" id="theme-toggle" aria-label="Toggle dark mode" style="width: 40px; height: 40px; padding-left: 10px; border: 1px solid rgba(109,40,217,0.2);">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="width: 20px; height: 20px;">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z" />
                 </svg>
             </button>
@@ -40,23 +32,25 @@
           <!-- Login/Logout Button -->
           <li class="nav-item">
             {% if not user.is_authenticated %}
-            <a href="{% url 'login' %}" class="btn rounded-pill fw-semibold" style="background: linear-gradient(135deg, #6D28D9 0%, #1E40AF 100%); color: white; padding: 0.6rem 1.4rem; font-size: 0.9rem;">
+            <a href="{% url 'login' %}" class="btn btn-primary rounded-pill fw-semibold" style="background: linear-gradient(135deg, #6D28D9 0%, #1E40AF 100%); border: none; color: white; padding: 0.6rem 1.4rem; font-size: 0.9rem; text-decoration: none;">
               Sign In
             </a>
             {% else %}
-            {% if user.is_superuser %}
-            <a href="/admin" class="btn rounded-pill fw-semibold" style="background: linear-gradient(135deg, #6D28D9 0%, #1E40AF 100%); color: white; padding: 0.6rem 1.4rem; font-size: 0.9rem;">
-              Admin
-            </a>
-            {% else %}
-            <a href="{% if user.teacher %}{% url 'teacher_dashboard' %}{% else %}{% url 'student_dashboard' %} {% endif %}" class="btn rounded-pill fw-semibold" style="background: linear-gradient(135deg, #6D28D9 0%, #1E40AF 100%); color: white; padding: 0.6rem 1.4rem; font-size: 0.9rem;">
-              Dashboard
-            </a>
-            {% endif %}
-            
-            <a href="{% url 'logout' %}" class="btn rounded-pill fw-semibold" style="background: linear-gradient(135deg, #6D28D9 0%, #1E40AF 100%); color: white; padding: 0.6rem 1.4rem; font-size: 0.9rem;">
-              Logout
-            </a>
+            <div class="d-flex gap-2">
+              {% if user.is_superuser %}
+              <a href="/admin" class="btn btn-primary rounded-pill fw-semibold" style="background: linear-gradient(135deg, #6D28D9 0%, #1E40AF 100%); border: none; color: white; padding: 0.6rem 1.4rem; font-size: 0.9rem; text-decoration: none;">
+                Admin
+              </a>
+              {% else %}
+              <a href="{% if user.teacher %}{% url 'teacher_dashboard' %}{% else %}{% url 'student_dashboard' %} {% endif %}" class="btn btn-primary rounded-pill fw-semibold" style="background: linear-gradient(135deg, #6D28D9 0%, #1E40AF 100%); border: none; color: white; padding: 0.6rem 1.4rem; font-size: 0.9rem; text-decoration: none;">
+                Dashboard
+              </a>
+              {% endif %}
+              
+              <a href="{% url 'logout' %}" class="btn btn-outline-danger rounded-pill fw-semibold" style="border: 1px solid #dc3545; color: #dc3545; padding: 0.6rem 1.4rem; font-size: 0.9rem; text-decoration: none;">
+                Logout
+              </a>
+            </div>
             {% endif %}
           </li>
         </ul>
