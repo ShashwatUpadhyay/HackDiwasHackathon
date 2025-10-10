@@ -783,7 +783,7 @@
                 {% if user.is_authenticated %}
                     {% if course|enrolled:user %}
                         {% if course.latest_vdo_url %}
-                            <a href='{% url "videoplayer" course.uid course.latest_vdo_url.uid %}' class="join-button">View</a>
+                            <a href='{% url "redirect_continue_video" course.uid %}' class="join-button">View</a>
                         {% else %}
                             <a href='{% url "student_dashboard" %}' class="join-button">View</a>
                         {% endif %}
