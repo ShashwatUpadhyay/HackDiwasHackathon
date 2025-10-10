@@ -14,7 +14,92 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'violet': '#6D29B3',
+                        'peach': '#FFD6AB',
+                        'off-white': '#FAF6F3',
+                        'charcoal': '#22212C',
+                        'gold': '#FFD700',
+                        'violet-light': '#8B5FBF',
+                        'violet-dark': '#4A1A66',
+                        'peach-light': '#FFE4C4',
+                        'charcoal-light': '#3A3947',
+                    },
+                    fontFamily: {
+                        'inter': ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    animation: {
+                        'float': 'float 6s ease-in-out infinite',
+                        'float-reverse': 'floatReverse 6s ease-in-out infinite',
+                        'pulse-slow': 'pulse 4s ease-in-out infinite',
+                        'shimmer': 'shimmer 2s ease-in-out infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' },
+                        },
+                        floatReverse: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(20px)' },
+                        },
+                        pulse: {
+                            '0%, 100%': { transform: 'scale(1)' },
+                            '50%': { transform: 'scale(1.05)' },
+                        },
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' },
+                        },
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Color Variables */
+        :root {
+            --violet: #6D29B3;
+            --peach: #FFD6AB;
+            --off-white: #FAF6F3;
+            --charcoal: #22212C;
+            --gold: #FFD700;
+            --violet-light: #8B5FBF;
+            --violet-dark: #4A1A66;
+            --peach-light: #FFE4C4;
+            --charcoal-light: #3A3947;
+        }
 
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--off-white);
+            color: var(--charcoal);
+            line-height: 1.6;
+        }
+
+        /* Custom gradient backgrounds */
+        .gradient-violet {
+            background: linear-gradient(135deg, var(--violet) 0%, var(--violet-light) 100%);
+        }
+
+        .gradient-peach {
+            background: linear-gradient(135deg, var(--peach) 0%, var(--peach-light) 100%);
+        }
+
+        .gradient-charcoal {
+            background: linear-gradient(135deg, var(--charcoal) 0%, var(--charcoal-light) 100%);
+        }
+
+    </style>
     {% block extrastyle %}
       
     {% endblock extrastyle %}
@@ -41,6 +126,6 @@
         ['mousemove', 'mousedown', 'keypress', 'touchstart', 'scroll'].forEach(event => {
             document.addEventListener(event, resetIdleTimer, true);
         });
-    </script>
+    </scrip>
 </body>
 </html>
