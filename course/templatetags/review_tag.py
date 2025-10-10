@@ -14,8 +14,13 @@ def enrolled(course,user):
         return False
     
 @register.filter
-def completed(lesson,student):
+def is_unlocked(lesson,student):
     return Progress.objects.filter(lesson=lesson,student=student).exists()
+
+@register.filter
+def is_completed(lesson,student):
+    return Progress.objects.filter(lesson=lesson,student=student,completed=True).exists()
+
 
 @register.filter
 def lesson_count(student):

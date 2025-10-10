@@ -8,7 +8,7 @@ from account.models import Teacher
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from io import BytesIO
-
+from rest_framework.decorators import api_view
 # Create your views here.
 def courses(request):
     course = models.Course.objects.filter(is_active = True)
@@ -26,7 +26,7 @@ def subcategory_courses(request, slug, sub):
     course = models.Course.objects.filter(is_active = True,subcategory=subcate)
     return render(request,'courses-cards.html',{'courses':course,'cate':cate,'subcate':subcate})
 
-def course(request, slug):
+def course_detail(request, slug):
     cour = get_object_or_404(models.Course, slug=slug)
     recomm = models.Course.objects.filter(category=cour.category).exclude(uid=cour.uid)[:4]
     teacher_img = cour.teacher.image.url
@@ -74,21 +74,35 @@ def upload_content(request):
         return JsonResponse({'status': 'success'})
     return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
 
+def get_all_lessons(course):
+    lessons = models.Lesson.objects.filter(course=course).order_by('created_at')
+    return lessons
+
+def get_all_lessons_uid_list(course):
+    uids = [str(uid) for uid in models.Lesson.objects.values_list('uid', flat=True).filter(course=course).order_by('created_at')]
+    return uids
 
 def videoplayer(request,uid, v_uid):
     course = get_object_or_404(models.Course, uid=uid)
-    videos = models.Lesson.objects.filter(course=course).order_by('created_at')
+    videos = get_all_lessons(course)
     video = models.Lesson.objects.get(uid=v_uid)
+    progress = models.Progress.objects.filter(student = request.user.student, lesson = video)
+    if len(progress) < 1:
+        messages.warning(request, 'please finish the previous lectures')
+        return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
     context={
         'course':course,
         'videos':videos,
         'video':video,
+        'progress':progress,
     }
     return render(request , 'dashboard/player.html',context)
 
 
 def mark_complete(request, uid):
-    profress = models.Progress.objects.create(student = request.user.student, lesson = get_object_or_404(models.Lesson, uid=uid))
+    progress = models.Progress.objects.get(lesson = get_object_or_404(models.Lesson, uid=uid))
+    progress.completed = True
+    progress.save()
     return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -117,13 +131,41 @@ def detection(request):
 def pose_compairition(request):
     return render(request , 'dashboard/pose-comparison.html')
 
+@api_view(['POST'])
 def update_watch_time(request):
-    if request.method == 'POST':
-        lesson_uid = request.POST.get('lesson_uid')
-        watch_time = int(request.POST.get('watch_time', 0))
+    try:
+        lesson_uid = request.data.get('lesson_uid')
         lesson = get_object_or_404(models.Lesson, uid=lesson_uid)
         progress, created = models.Progress.objects.get_or_create(student=request.user.student, lesson=lesson)
-        progress.watch_time += watch_time
-        progress.save()
-        return JsonResponse({'status': 'success'})
-    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)
+        
+        if not progress.watched():
+            progress.watch_time += 3
+            progress.save()
+        else:
+            all_lessons = get_all_lessons_uid_list(lesson.course)
+            next_lesson = all_lessons.index(lesson_uid)+1 if all_lessons[-1] != lesson_uid else -1
+            next_progress, _ = models.Progress.objects.get_or_create(student=request.user.student, lesson=get_object_or_404(models.Lesson, uid=all_lessons[next_lesson]))
+            print(all_lessons.index(lesson_uid),_)
+            return JsonResponse({'status': 'success','data':lesson_uid, 'watched':True,'next':all_lessons[next_lesson]})
+        return JsonResponse({'status': 'success','data':lesson_uid, 'watched': False})
+    except Exception as e:
+        print(e)
+        return JsonResponse({'status': 'error', 'message': 'Invalid request' }, status=400)
+    
+def redirect_continue_video(request,course_uid):
+    lessons = get_all_lessons(get_object_or_404(models.Course,uid=course_uid))
+    progresses = models.Progress.objects.filter(student=request.user.student, lesson__in=lessons)
+    lesson_uid = ''
+    if not progresses:
+        models.Progress.objects.create(student=request.user.student, lesson=lessons[0])
+        continue_url = f'/courses/{course_uid}/video/{lessons[0].uid}/'
+        return redirect(continue_url)
+    else:
+        uncompleted_progress = progresses.filter(completed = False)
+        if uncompleted_progress.exists():
+            uncompleted_progress[0].lesson.uid
+            continue_url = f'/courses/{course_uid}/video/{uncompleted_progress[0].lesson.uid}/'
+            return redirect(continue_url)
+        else:
+            continue_url = f'/courses/{course_uid}/video/{lessons[0].uid}/'
+            return redirect(continue_url)

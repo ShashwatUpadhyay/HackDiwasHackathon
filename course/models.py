@@ -159,6 +159,7 @@ def resultAnounced(sender, instance, created, **kwargs):
 class Progress(models.Model):
     student = models.ForeignKey('account.Student', on_delete=models.CASCADE, related_name='progress')
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='progress')
+    completed = models.BooleanField(default=False)
     completed_at = models.DateTimeField(auto_now_add=True)
     watch_time = models.IntegerField(default=0)  # in seconds
     
@@ -173,9 +174,21 @@ class Progress(models.Model):
             print(f"Error reading video duration: {e}")
             return 0
 
+    def watched(self):
+        video_length = self.video_length()
+        watched_time = self.watch_time
+        
+        #checking if its 80%
+        watched_percentage = (watched_time/video_length)*100
+        if watched_percentage >= 80:
+            self.completed = True
+            self.save()
+            return True
+        else:
+            return False
 
     def __str__(self):
-        return f"{self.student} completed {self.lesson}"
+        return f"{self.student} : {self.lesson}"
 
 # class Comment(models.Model):
 #     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='comments')

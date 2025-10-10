@@ -511,7 +511,7 @@ Student Dashboard | KalaPathshala
                                 </a>
                                 
                                 {% if course.course.latest_vdo_url %}
-                                <a class="course-btn"  href='{% url "videoplayer" course.course.uid course.course.latest_vdo_url.uid %}'>
+                                <a class="course-btn"  href='{% url "redirect_continue_video" course.course.uid %}'>
                                     <span>📚</span> Continue
                                 </a>                                    
                                 {% endif %}

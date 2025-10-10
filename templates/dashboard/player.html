@@ -243,7 +243,7 @@ KalaPathshala Player
 </head>
 <body>
     <div class="container">
-        {% include "dashboard/component/sidebar.html" %}
+        {% include "dashboard/component/sidebar.html" with video=video %}
         <main class="main">
             <div class="player-title">{{course.title}}</div>
             <div class="video-player">
@@ -255,15 +255,19 @@ KalaPathshala Player
                     
                     {% if user.student %}
                     
-                    {% if video|completed:user.student %}
-                    <button  class="video-ctrl-btn">completed</button>
-                    {% else %}
-                    <a href='{% url "mark_complete" video.uid %}'  class="video-ctrl-btn">Complete</a>
+                    <!-- {% if progress.completed %}
+                        <button  class="video-ctrl-btn">completed</button>
+                        {% else %}
+                        <a href='{% url "mark_complete" video.uid %}'  class="video-ctrl-btn">Complete</a>
+                    {% endif %} -->
+                    
+                    
                     {% endif %}
-                        
-                        
+                    {% if progress.watched %}
+                        <a href='{% url "videoplayer" course.uid video.uid %}'  class="video-ctrl-btn">Next</a>
+                      {% else %}
+                      <a id="next-button"  class="hidden video-ctrl-btn">Next</a>
                     {% endif %}
-                        
                     <button id="select-video-btn" class="video-ctrl-btn">🎬 Select Video</button>
                     <button id="speed-btn" class="video-ctrl-btn">1x</button>
                     <button id="fullscreen-btn" class="video-ctrl-btn">⛶</button>
@@ -334,11 +338,51 @@ KalaPathshala Player
             themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
         });
 
+    function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.startsWith(name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+        }
+        }
+    }
+    return cookieValue;
+    }
+
+    const csrftoken = getCookie('csrftoken');
     function UpdateWatchTime() {
         console.log("This function runs every 10 seconds");
+        fetch('{% url "update_watch_time" %}',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': csrftoken, 
+            },
+            body: JSON.stringify({
+                lesson_uid: '{{ video.uid }}',
+            }),
+        }).then(response => {
+            if (!response.ok){
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            return response.json(); 
+        })
+        .then(data => {
+            if(data.watched){
+                let btn = document.getElementById('next-button')
+                btn.classList.remove('hidden')
+                btn.href = `/courses/{{ course.uid }}/video/${data.next}/`
+            }
+            console.log('Success:', data);
+        })
+
     }
     // Run myFunction every 10 seconds (10000 milliseconds)
-    setInterval(UpdateWatchTime, 10000);
+    setInterval(UpdateWatchTime, 3000);
 
      
 
