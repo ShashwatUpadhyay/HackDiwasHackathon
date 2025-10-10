@@ -3,185 +3,504 @@
 {% block title %}
 Student Dashboard | KalaPathshala
 {% endblock title %}
+{% load dashboard_tags %}
+{% block extrastyle %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<style>
+    :root {
+        /* Vibrant Modern Color Palette - No Blue */
+        --emerald-500: #10b981;
+        --emerald-600: #059669;
+        --emerald-700: #047857;
+        --amber-400: #fbbf24;
+        --amber-500: #f59e0b;
+        --amber-600: #d97706;
+        --violet-500: #8b5cf6;
+        --violet-600: #7c3aed;
+        --violet-700: #6d28d9;
+        --orange-400: #fb923c;
+        --orange-500: #f97316;
+        --orange-600: #ea580c;
+        --rose-400: #fb7185;
+        --rose-500: #f43f5e;
+        --rose-600: #e11d48;
+        --gold-400: #facc15;
+        --gold-500: #eab308;
+        --gold-600: #ca8a04;
+        
+        /* Modern Gradients */
+        --gradient-primary: linear-gradient(135deg, #10b981 0%, #8b5cf6 50%, #f59e0b 100%);
+        --gradient-secondary: linear-gradient(135deg, #fb923c 0%, #f43f5e 50%, #8b5cf6 100%);
+        --gradient-accent: linear-gradient(135deg, #facc15 0%, #fb923c 50%, #f43f5e 100%);
+        --gradient-glass: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+        
+        /* Glassmorphism */
+        --glass-bg: rgba(255, 255, 255, 0.1);
+        --glass-border: rgba(255, 255, 255, 0.2);
+        --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        
+        /* Neumorphism */
+        --neu-light: #ffffff;
+        --neu-dark: #d1d9e6;
+        --neu-shadow-light: 20px 20px 60px #bebebe;
+        --neu-shadow-dark: -20px -20px 60px #ffffff;
+        
+        /* Layout */
+        --sidebar-width: 280px;
+        --border-radius: 24px;
+        --border-radius-lg: 32px;
+        --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        
+        /* Typography */
+        --font-primary: 'Inter', system-ui, sans-serif;
+        --font-display: 'Poppins', system-ui, sans-serif;
+        
+        /* Spacing */
+        --space-xs: 0.5rem;
+        --space-sm: 1rem;
+        --space-md: 1.5rem;
+        --space-lg: 2rem;
+        --space-xl: 3rem;
+        --space-2xl: 4rem;
+    }
     
-
-{% block content %}
-{% load review_tag %}
+    [data-theme="dark"] {
+        --glass-bg: rgba(0, 0, 0, 0.2);
+        --glass-border: rgba(255, 255, 255, 0.1);
+        --neu-light: #2d3748;
+        --neu-dark: #1a202c;
+    }
+    /* Modern Base Styles */
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+    }
     
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-purple: #6d28d9;
-            --primary-blue: #2563eb;
-            --accent-gold: #d4a017;
-            --bg-primary: #f5f7fa;
-            --bg-gradient: linear-gradient(135deg, #6d28d9 0%, #2563eb 100%);
-            --sidebar-width: 250px;
-            --card-radius: 20px;
-            --shadow: 0 4px 24px rgba(109,40,217,0.10);
-            --text-primary: #222;
-            --text-secondary: #666;
+    html, body {
+        height: 100%;
+        font-family: var(--font-primary);
+        background: linear-gradient(135deg, #f0fdf4 0%, #fef3c7 50%, #fdf2f8 100%);
+        color: #1f2937;
+        overflow-x: hidden;
+    }
+    
+    /* Animated Background */
+    body::before {
+        content: '';
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: 
+            radial-gradient(circle at 20% 80%, rgba(16, 185, 129, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%),
+            radial-gradient(circle at 40% 40%, rgba(245, 158, 11, 0.1) 0%, transparent 50%);
+        z-index: -1;
+        animation: backgroundShift 20s ease-in-out infinite;
+    }
+    
+    @keyframes backgroundShift {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.8; }
+    }
+    
+    /* Modern Dashboard Layout */
+    .dashboard-app {
+        display: flex;
+        min-height: 100vh;
+        position: relative;
+    }
+    
+    /* Glassmorphism Sidebar */
+    .sidebar {
+        width: var(--sidebar-width);
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border-right: 1px solid var(--glass-border);
+        color: #1f2937;
+        display: flex;
+        flex-direction: column;
+        padding: var(--space-xl) var(--space-lg);
+        position: relative;
+        z-index: 10;
+        transition: var(--transition);
+    }
+    
+    .sidebar::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--gradient-primary);
+        opacity: 0.05;
+        z-index: -1;
+    }
+    
+    .sidebar .logo {
+        font-family: var(--font-display);
+        font-size: 1.8rem;
+        font-weight: 800;
+        margin-bottom: var(--space-2xl);
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        letter-spacing: -0.02em;
+        position: relative;
+    }
+    
+    .sidebar .logo::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 60px;
+        height: 3px;
+        background: var(--gradient-accent);
+        border-radius: 2px;
+    }
+    
+    .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-sm);
+        flex: 1;
+    }
+    
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        font-size: 1rem;
+        font-weight: 500;
+        color: #6b7280;
+        text-decoration: none;
+        padding: var(--space-sm) var(--space-md);
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .sidebar-link::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: var(--gradient-primary);
+        opacity: 0.1;
+        transition: var(--transition);
+        z-index: -1;
+    }
+    
+    .sidebar-link:hover::before,
+    .sidebar-link.active::before {
+        left: 0;
+    }
+    
+    .sidebar-link.active,
+    .sidebar-link:hover {
+        color: #1f2937;
+        transform: translateX(4px);
+    }
+    
+    .sidebar-link i {
+        font-size: 1.2rem;
+        width: 20px;
+        text-align: center;
+    }
+    
+    .sidebar-link.logout {
+        color: var(--rose-500);
+        margin-top: var(--space-lg);
+        border: 1px solid var(--rose-200);
+    }
+    
+    .sidebar-link.logout:hover {
+        background: rgba(244, 63, 94, 0.1);
+        border-color: var(--rose-400);
+    }
+    
+    /* Main Content Area */
+    .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        background: transparent;
+        padding: var(--space-xl);
+        position: relative;
+    }
+    
+    /* Floating Elements */
+    .floating-shape {
+        position: absolute;
+        border-radius: 50%;
+        opacity: 0.1;
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    .floating-shape:nth-child(1) {
+        width: 80px;
+        height: 80px;
+        background: var(--emerald-500);
+        top: 10%;
+        right: 10%;
+        animation-delay: 0s;
+    }
+    
+    .floating-shape:nth-child(2) {
+        width: 120px;
+        height: 120px;
+        background: var(--violet-500);
+        top: 60%;
+        right: 20%;
+        animation-delay: 2s;
+    }
+    
+    .floating-shape:nth-child(3) {
+        width: 60px;
+        height: 60px;
+        background: var(--amber-500);
+        top: 30%;
+        right: 5%;
+        animation-delay: 4s;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px) rotate(0deg); }
+        50% { transform: translateY(-20px) rotate(180deg); }
+    }
+    /* Dashboard Sections */
+    .dashboard-section,
+    .courses-section,
+    .profile-section {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        display: none;
+        animation: fadeInUp 0.6s ease-out;
+    }
+    
+    .dashboard-section.active,
+    .courses-section.active,
+    .profile-section.active {
+        display: block;
+    }
+    
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(30px);
         }
-        [data-theme="dark"] {
-            --bg-primary: #181c24;
-            --text-primary: #fff;
-            --text-secondary: #b3b3b3;
+        to {
+            opacity: 1;
+            transform: translateY(0);
         }
-        html, body {
-            height: 100%;
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background: var(--bg-primary);
-            color: var(--text-primary);
-        }
-        .dashboard-app {
-            display: flex;
-            min-height: 100vh;
-        }
-        .sidebar {
-            width: var(--sidebar-width);
-            background: var(--bg-gradient);
-            color: #fff;
-            display: flex;
-            flex-direction: column;
-            padding: 2rem 1.2rem 1.2rem 1.2rem;
-            border-radius: 0 32px 32px 0;
-            box-shadow: var(--shadow);
-        }
-        .sidebar .logo {
-            font-size: 1.7rem;
-            font-weight: 800;
-            margin-bottom: 2.5rem;
-            letter-spacing: 1px;
-        }
-        .sidebar-nav {
-            display: flex;
-            flex-direction: column;
-            gap: 1.2rem;
-            flex: 1;
-        }
-        .sidebar-link {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            font-size: 1.1rem;
-            color: #fff;
-            text-decoration: none;
-            padding: 0.7rem 1rem;
-            border-radius: 12px;
-            transition: background 0.2s, color 0.2s;
-            cursor: pointer;
-        }
-        .sidebar-link.active, .sidebar-link:hover {
-            background: rgba(255,255,255,0.13);
-            color: #ffe082;
-        }
-        .sidebar-link.logout {
-            color: #ff6b6b;
-            margin-top: 2rem;
-        }
-        .sidebar-link.logout:hover {
-            background: rgba(255,107,107,0.13);
-            color: #fff;
-        }
-        .main-content {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            background: transparent;
-            align-items: center;
-            justify-content: flex-start;
-            padding-top: 3rem;
-        }
-        .dashboard-section,
-        .courses-section,
-        .profile-section {
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-            display: none;
-        }
-        .dashboard-section.active,
-        .courses-section.active,
-        .profile-section.active {
-            display: block;
-        }
-        .profile-section.active.beautiful-profile {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            min-height: 70vh;
-        }
-        .welcome {
-            font-size: 2.2rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
-            margin-top: 0.5rem;
-        }
-        .summary-cards {
-            display: flex;
-            gap: 2rem;
-            margin-bottom: 2.5rem;
-        }
-        .summary-card {
-            flex: 1;
-            background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
-            color: #fff;
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow);
-            padding: 2rem 1.5rem;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 1.1rem;
-            font-weight: 500;
-            min-width: 180px;
-        }
-        .summary-card .card-label {
-            font-size: 1.1rem;
-            opacity: 0.9;
-            margin-bottom: 0.7rem;
-        }
-        .summary-card .card-value {
-            font-size: 2.2rem;
-            font-weight: 800;
-        }
-        .recent-activity {
-            background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
-            color: #fff;
-            border-radius: var(--card-radius);
-            box-shadow: var(--shadow);
-            padding: 1.5rem 2rem;
-            margin-top: 1.5rem;
-        }
-        .recent-activity-title {
-            font-size: 1.3rem;
-            font-weight: 700;
-            margin-bottom: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-        }
-        .activity-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .activity-list li {
-            margin-bottom: 0.8rem;
-            font-size: 1.08rem;
-            display: flex;
-            align-items: center;
-            gap: 0.7rem;
-        }
-        .activity-list li:last-child { margin-bottom: 0; }
-        .activity-icon { font-size: 1.1rem; }
-        /* Profile Section */
-        .profile-title {
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 2rem;
+    }
+    
+    /* Modern Welcome Section */
+    .welcome {
+        font-family: var(--font-display);
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: var(--space-2xl);
+        margin-top: var(--space-sm);
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1.2;
+    }
+    
+    /* Modern Summary Cards with Glassmorphism */
+    .summary-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: var(--space-lg);
+        margin-bottom: var(--space-2xl);
+    }
+    
+    .summary-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-lg);
+        padding: var(--space-xl);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        transition: var(--transition);
+        cursor: pointer;
+    }
+    
+    .summary-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-primary);
+        border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    }
+    
+    .summary-card:hover {
+        transform: translateY(-8px);
+        box-shadow: var(--glass-shadow);
+    }
+    
+    .summary-card .card-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: var(--gradient-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: var(--space-md);
+        font-size: 1.5rem;
+        color: white;
+    }
+    
+    .summary-card .card-label {
+        font-size: 1rem;
+        font-weight: 500;
+        color: #6b7280;
+        margin-bottom: var(--space-sm);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+    }
+    
+    .summary-card .card-value {
+        font-family: var(--font-display);
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        line-height: 1;
+    }
+    /* Modern Recent Activity */
+    .recent-activity {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-lg);
+        padding: var(--space-xl);
+        margin-top: var(--space-lg);
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .recent-activity::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-secondary);
+        border-radius: var(--border-radius-lg) var(--border-radius-lg) 0 0;
+    }
+    
+    .recent-activity-title {
+        font-family: var(--font-display);
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: var(--space-lg);
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        color: #1f2937;
+    }
+    
+    .recent-activity-title i {
+        background: var(--gradient-secondary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .activity-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        gap: var(--space-md);
+    }
+    
+    .activity-list li {
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+        padding: var(--space-sm);
+        border-radius: var(--border-radius);
+        transition: var(--transition);
+        cursor: pointer;
+    }
+    
+    .activity-list li:hover {
+        background: rgba(16, 185, 129, 0.05);
+        transform: translateX(4px);
+    }
+    
+    .activity-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        background: var(--gradient-primary);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-size: 1rem;
+    }
+    
+    .activity-text {
+        flex: 1;
+        color: #374151;
+        font-weight: 500;
+    }
+    
+    .activity-time {
+        color: #9ca3af;
+        font-size: 0.875rem;
+    }
+    /* Modern Profile Title */
+    .profile-title {
+        font-family: var(--font-display);
+        font-size: 2.5rem;
+        font-weight: 800;
+        margin-bottom: var(--space-2xl);
+        background: var(--gradient-primary);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        display: flex;
+        align-items: center;
+        gap: var(--space-sm);
+    }
+    
+    .profile-title i {
+        background: var(--gradient-accent);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
         }
         .profile-form {
             display: flex;
@@ -234,18 +553,92 @@ Student Dashboard | KalaPathshala
         .profile-form button:hover {
             background: var(--primary-blue);
         }
-        /* Responsive */
-        @media (max-width: 900px) {
-            .dashboard-app { flex-direction: column; }
-            .sidebar { flex-direction: row; width: 100vw; border-radius: 0 0 32px 32px; padding: 1.2rem; }
-            .main-content { padding-top: 0; }
+    /* Responsive Design */
+    @media (max-width: 1024px) {
+        .dashboard-app {
+            flex-direction: column;
         }
-        @media (max-width: 700px) {
-            .sidebar { display: none; }
-            .main-content { padding: 0; }
-            .dashboard-section, .profile-section { padding: 1rem; }
-            .summary-cards { flex-direction: column; gap: 1rem; }
+        
+        .sidebar {
+            width: 100%;
+            height: auto;
+            flex-direction: row;
+            padding: var(--space-md);
+            border-radius: 0 0 var(--border-radius-lg) var(--border-radius-lg);
+            overflow-x: auto;
         }
+        
+        .sidebar-nav {
+            flex-direction: row;
+            gap: var(--space-sm);
+        }
+        
+        .sidebar-link {
+            white-space: nowrap;
+            min-width: 120px;
+            justify-content: center;
+        }
+        
+        .main-content {
+            padding: var(--space-lg);
+        }
+        
+        .summary-cards {
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .welcome {
+            font-size: 2.2rem;
+        }
+        
+        .summary-cards {
+            grid-template-columns: 1fr;
+            gap: var(--space-md);
+        }
+        
+        .courses-list {
+            grid-template-columns: 1fr;
+            gap: var(--space-md);
+        }
+        
+        .course-actions {
+            flex-direction: column;
+        }
+        
+        .activity-list li {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--space-xs);
+        }
+        
+        .activity-time {
+            align-self: flex-end;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .main-content {
+            padding: var(--space-md);
+        }
+        
+        .welcome {
+            font-size: 1.8rem;
+        }
+        
+        .summary-card {
+            padding: var(--space-lg);
+        }
+        
+        .course-content {
+            padding: var(--space-lg);
+        }
+        
+        .recent-activity {
+            padding: var(--space-lg);
+        }
+    }
         /* Dark mode overrides */
         [data-theme="dark"] body {
             background: var(--bg-primary);
@@ -271,64 +664,152 @@ Student Dashboard | KalaPathshala
             color: #fff;
             border: 1px solid #374151;
         }
-        /* My Courses Section */
-        .courses-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            padding: 1rem;
-        }
-        .course-card {
-            background: linear-gradient(135deg, #a78bfa 0%, #60a5fa 100%);
-            border-radius: 20px;
-            box-shadow: var(--shadow);
-            overflow: hidden;
-            transition: transform 0.3s ease;
-            color: #fff;
-        }
-        .course-card:hover {
-            transform: translateY(-5px);
-        }
-        .course-thumbnail {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .course-content {
-            padding: 1.5rem;
-        }
-        .course-info h3 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1.3rem;
-            color: #fff;
-        }
-        .course-info p {
-            margin: 0 0 1rem 0;
-            font-size: 1.05rem;
-            opacity: 0.9;
-        }
-        .course-actions {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-        .course-btn {
-            background: rgba(255,255,255,0.15);
-            color: #fff;
-            border: none;
-            border-radius: 8px;
-            padding: 0.7rem 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: background 0.2s;
-        }
-        .course-btn:hover {
-            background: rgba(255,255,255,0.25);
-        }
+    /* Modern Course Cards */
+    .courses-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: var(--space-lg);
+        padding: var(--space-sm);
+    }
+    
+    .course-card {
+        background: var(--glass-bg);
+        backdrop-filter: blur(20px);
+        border: 1px solid var(--glass-border);
+        border-radius: var(--border-radius-lg);
+        overflow: hidden;
+        transition: var(--transition);
+        position: relative;
+        cursor: pointer;
+    }
+    
+    .course-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: var(--gradient-accent);
+        z-index: 1;
+    }
+    
+    .course-card:hover {
+        transform: translateY(-12px);
+        box-shadow: var(--glass-shadow);
+    }
+    
+    .course-thumbnail {
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+    
+    .course-card:hover .course-thumbnail {
+        transform: scale(1.05);
+    }
+    
+    .course-content {
+        padding: var(--space-xl);
+        position: relative;
+    }
+    
+    .course-info h3 {
+        font-family: var(--font-display);
+        font-size: 1.4rem;
+        font-weight: 700;
+        margin: 0 0 var(--space-sm) 0;
+        color: #1f2937;
+        line-height: 1.3;
+    }
+    
+    .course-info p {
+        margin: 0 0 var(--space-lg) 0;
+        font-size: 1rem;
+        color: #6b7280;
+        line-height: 1.6;
+    }
+    
+    .course-progress {
+        width: 100%;
+        height: 8px;
+        background: rgba(16, 185, 129, 0.1);
+        border-radius: 4px;
+        margin: var(--space-md) 0;
+        overflow: hidden;
+    }
+    
+    .progress-bar {
+        height: 100%;
+        background: var(--gradient-primary);
+        border-radius: 4px;
+        transition: width 0.6s ease;
+        position: relative;
+    }
+    
+    .progress-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+        animation: shimmer 2s infinite;
+    }
+    
+    @keyframes shimmer {
+        0% { transform: translateX(-100%); }
+        100% { transform: translateX(100%); }
+    }
+    
+    .course-stats {
+        display: flex;
+        justify-content: space-between;
+        margin: var(--space-sm) 0;
+        font-size: 0.9rem;
+        color: #6b7280;
+    }
+    
+    .course-actions {
+        display: flex;
+        gap: var(--space-sm);
+        margin-top: var(--space-lg);
+    }
+    
+    .course-btn {
+        background: var(--gradient-primary);
+        color: white;
+        border: none;
+        border-radius: var(--border-radius);
+        padding: var(--space-sm) var(--space-md);
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: var(--space-xs);
+        transition: var(--transition);
+        text-decoration: none;
+        font-size: 0.9rem;
+    }
+    
+    .course-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+    }
+    
+    .course-btn.secondary {
+        background: var(--glass-bg);
+        color: #374151;
+        border: 1px solid var(--glass-border);
+    }
+    
+    .course-btn.secondary:hover {
+        background: var(--gradient-secondary);
+        color: white;
+        border-color: transparent;
+    }
         .course-progress {
             width: 100%;
             height: 6px;
@@ -434,95 +915,202 @@ Student Dashboard | KalaPathshala
         .save-btn:hover {
             background: linear-gradient(90deg, #2563eb 0%, #6d28d9 100%);
         }
-        @media (max-width: 700px) {
-            .profile-card, .courses-section { padding: 1rem; }
-            .profile-card { max-width: 100%; }
-            .courses-list { gap: 1rem; }
-            .course-card { flex-direction: column; gap: 1rem; }
-        }
+    /* Additional Modern Touches */
+    .course-btn i {
+        transition: var(--transition);
+    }
+    
+    .course-btn:hover i {
+        transform: scale(1.1);
+    }
+    
+    .summary-card .card-icon {
+        transition: var(--transition);
+    }
+    
+    .summary-card:hover .card-icon {
+        transform: scale(1.1) rotate(5deg);
+    }
+    
+    /* Loading Animation */
+    @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+    }
+    
+    .loading {
+        animation: pulse 2s infinite;
+    }
+    
+    /* Scrollbar Styling */
+    ::-webkit-scrollbar {
+        width: 8px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: rgba(16, 185, 129, 0.1);
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: var(--gradient-primary);
+        border-radius: 4px;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--gradient-secondary);
+    }
     </style>
-    <div class="dashboard-app mt-5">
+    {% endblock extrastyle %}
+    {% block content %}
+    <div class="dashboard-app">
+        <!-- Floating Background Shapes -->
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        <div class="floating-shape"></div>
+        
         <aside class="sidebar">
             <div class="logo">KalaPathshala</div>
             <nav class="sidebar-nav">
-                <a class="sidebar-link active" id="nav-dashboard"><span>🏠</span> Dashboard</a>
-                <a class="sidebar-link" id="nav-courses"><span>📚</span> My Courses</a>
-                <a class="sidebar-link" id="nav-assignments"><span>📝</span> Assignments</a>
-                <a class="sidebar-link" id="nav-live" href="#"><span>🔴</span> Live Classes</a>
-                <a class="sidebar-link" id="nav-profile"><span>👤</span> Profile</a>
-                <a class="sidebar-link" id="nav-notifications"><span>🔔</span> Notifications</a>
-                <a class="sidebar-link logout" id="nav-logout" href="{% url "logout" %}" ><span>🚪</span> Logout</a>
+                <a class="sidebar-link active" id="nav-dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="sidebar-link" id="nav-courses">
+                    <i class="fas fa-book-open"></i>
+                    <span>My Courses</span>
+                </a>
+                <a class="sidebar-link" id="nav-assignments">
+                    <i class="fas fa-tasks"></i>
+                    <span>Assignments</span>
+                </a>
+                <a class="sidebar-link" id="nav-live">
+                    <i class="fas fa-video"></i>
+                    <span>Live Classes</span>
+                </a>
+                <a class="sidebar-link" id="nav-profile">
+                    <i class="fas fa-user-circle"></i>
+                    <span>Profile</span>
+                </a>
+                <a class="sidebar-link" id="nav-notifications">
+                    <i class="fas fa-bell"></i>
+                    <span>Notifications</span>
+                </a>
+                <a class="sidebar-link logout" id="nav-logout" href="{% url "logout" %}">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </a>
             </nav>
         </aside>
+        
         <main class="main-content">
             <!-- Dashboard Section -->
             <section class="dashboard-section active" id="dashboard-section">
-                <div class="welcome">Welcome, <span id="student-name">{{ user.student.full_name }}</span> 👋</div>
+                <div class="welcome">Welcome back, <span id="student-name">{{ user.student.full_name }}</span>! 🎭</div>
+                
                 <div class="summary-cards">
                     <div class="summary-card">
+                        <div class="card-icon">
+                            <i class="fas fa-graduation-cap"></i>
+                        </div>
                         <div class="card-label">Total Courses</div>
                         <div class="card-value">{{user.student.enrollments.all|length}}</div>
                     </div>
                     <div class="summary-card">
-                        <div class="card-label">Lesson completed</div>
+                        <div class="card-icon">
+                            <i class="fas fa-check-circle"></i>
+                        </div>
+                        <div class="card-label">Lessons Completed</div>
                         <div class="card-value">{{user.student.progress.all|length}}/{{user.student|lesson_count}}</div>
                     </div>
-                    {% comment %} <div class="summary-card">
-                        <div class="card-label">New Comments</div>
+                    <div class="summary-card">
+                        <div class="card-icon">
+                            <i class="fas fa-trophy"></i>
+                        </div>
+                        <div class="card-label">Achievements</div>
                         <div class="card-value">12</div>
-                    </div> {% endcomment %}
+                    </div>
+                    <div class="summary-card">
+                        <div class="card-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <div class="card-label">Study Hours</div>
+                        <div class="card-value">48h</div>
+                    </div>
                 </div>
+                
                 <div class="recent-activity">
-                    <div class="recent-activity-title"><span>📌</span> Recent Activity</div>
+                    <div class="recent-activity-title">
+                        <i class="fas fa-chart-line"></i>
+                        Recent Activity
+                    </div>
                     <ul class="activity-list">
-                        <li><span class="activity-icon">💬</span> New comment on <b>"Java Basics"</b></li>
-                        <li><span class="activity-icon">👨‍🎓</span> 4 students enrolled in <b>"React for Beginners"</b></li>
-                        <li><span class="activity-icon">🆕</span> You published a new course <b>"Python DSA"</b></li>
+                        <li>
+                            <div class="activity-icon">
+                                <i class="fas fa-comment"></i>
+                            </div>
+                            <div class="activity-text">New comment on <strong>"Kathak Fundamentals"</strong></div>
+                            <div class="activity-time">2h ago</div>
+                        </li>
+                        <li>
+                            <div class="activity-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="activity-text">4 students enrolled in <strong>"Hatha Yoga Basics"</strong></div>
+                            <div class="activity-time">4h ago</div>
+                        </li>
+                        <li>
+                            <div class="activity-icon">
+                                <i class="fas fa-plus-circle"></i>
+                            </div>
+                            <div class="activity-text">New lesson added to <strong>"Carnatic Vocal Training"</strong></div>
+                            <div class="activity-time">6h ago</div>
+                        </li>
                     </ul>
                 </div>
             </section>
             <!-- My Courses Section -->
             <section class="courses-section" id="courses-section">
-                <div class="profile-title">My Courses</div>
+                <div class="profile-title">
+                    <i class="fas fa-book-open"></i>
+                    My Courses
+                </div>
                 <div class="courses-list">
-                    
                     {% for course in courses %}
                     <div class="course-card">
-                        <img src="{{course.course.image.url}}" alt="Java Course" class="course-thumbnail">
+                        <img src="{{course.course.image.url}}" alt="{{course.course.title}}" class="course-thumbnail">
                         <div class="course-content">
                             <div class="course-info">
                                 <h3>{{course.course.title}}</h3>
-                                    <p>{{course.course.description}}.</p>
+                                <p>{{course.course.description}}</p>
                             </div>
-                            {% if user.student %}
                             
+                            {% if user.student %}
                             <div class="course-progress">
                                 <div class="progress-bar" style="width: {{course.course|progress:user.student}}%"></div>
                             </div>
                             <div class="course-stats">
-                                <span>{{course.course|progress:user.student}}% Complete</span>
-                                <span>{{ course.lesson_count }} Lessons</span>
+                                <span><i class="fas fa-percentage"></i> {{course.course|progress:user.student}}% Complete</span>
+                                <span><i class="fas fa-play-circle"></i> {{ course.lesson_count }} Lessons</span>
                             </div>
                             {% endif %}
 
                             <div class="course-actions">
-                                <a class="course-btn" href='{% url "course" course.course.slug  %}'>
-                                    <span>🎬</span> Preview
+                                <a class="course-btn" href='{% url "course" course.course.slug %}'>
+                                    <i class="fas fa-eye"></i>
+                                    Preview
                                 </a>
                                 
                                 {% if course.course.latest_vdo_url %}
-                                <a class="course-btn"  href='{% url "redirect_continue_video" course.course.uid %}'>
-                                    <span>📚</span> Continue
-                                </a>                                    
+                                <a class="course-btn secondary" href='{% url "redirect_continue_video" course.course.uid %}'>
+                                    <i class="fas fa-play"></i>
+                                    Continue
+                                </a>
                                 {% endif %}
-                                
-                                    
                             </div>
                         </div>
                     </div>
                     {% endfor %}
-
-                    
                 </div>
             </section>
             <!-- Live Classes Section -->
@@ -881,5 +1469,96 @@ Student Dashboard | KalaPathshala
                 }
             });
         });
+
+        // Modern Dashboard Enhancements
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add loading states to buttons
+            const buttons = document.querySelectorAll('.course-btn, .summary-card');
+            buttons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (!this.href || this.href.includes('#')) {
+                        this.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            this.style.transform = '';
+                        }, 150);
+                    }
+                });
+            });
+
+            // Intersection Observer for animations
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.6s ease-out forwards';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all cards and sections
+            document.querySelectorAll('.summary-card, .course-card, .recent-activity').forEach(el => {
+                observer.observe(el);
+            });
+
+            // Add hover effects to course cards
+            document.querySelectorAll('.course-card').forEach(card => {
+                card.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-12px) scale(1.02)';
+                });
+                
+                card.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0) scale(1)';
+                });
+            });
+
+            // Add ripple effect to buttons
+            document.querySelectorAll('.course-btn, .summary-card').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    const x = e.clientX - rect.left - size / 2;
+                    const y = e.clientY - rect.top - size / 2;
+                    
+                    ripple.style.width = ripple.style.height = size + 'px';
+                    ripple.style.left = x + 'px';
+                    ripple.style.top = y + 'px';
+                    ripple.classList.add('ripple');
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 600);
+                });
+            });
+        });
+
+        // Add ripple effect CSS
+        const rippleCSS = `
+            .ripple {
+                position: absolute;
+                border-radius: 50%;
+                background: rgba(255, 255, 255, 0.3);
+                transform: scale(0);
+                animation: ripple-animation 0.6s linear;
+                pointer-events: none;
+            }
+            
+            @keyframes ripple-animation {
+                to {
+                    transform: scale(4);
+                    opacity: 0;
+                }
+            }
+        `;
+        
+        const style = document.createElement('style');
+        style.textContent = rippleCSS;
+        document.head.appendChild(style);
     </script>
     {% endblock content %}
