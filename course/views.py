@@ -116,3 +116,14 @@ def detection(request):
 
 def pose_compairition(request):
     return render(request , 'dashboard/pose-comparison.html')
+
+def update_watch_time(request):
+    if request.method == 'POST':
+        lesson_uid = request.POST.get('lesson_uid')
+        watch_time = int(request.POST.get('watch_time', 0))
+        lesson = get_object_or_404(models.Lesson, uid=lesson_uid)
+        progress, created = models.Progress.objects.get_or_create(student=request.user.student, lesson=lesson)
+        progress.watch_time += watch_time
+        progress.save()
+        return JsonResponse({'status': 'success'})
+    return JsonResponse({'status': 'error', 'message': 'Invalid request'}, status=400)

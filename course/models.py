@@ -7,6 +7,7 @@ from hd.email_sender  import course_purchased
 import os
 import subprocess
 from django.conf import settings
+from moviepy import VideoFileClip
 
 # Create your models here.
 class CourseCategory(models.Model):
@@ -92,8 +93,6 @@ class Lesson(models.Model):
 
     class Meta:
         get_latest_by = 'created_at'
-
-
     
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -161,6 +160,19 @@ class Progress(models.Model):
     student = models.ForeignKey('account.Student', on_delete=models.CASCADE, related_name='progress')
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, related_name='progress')
     completed_at = models.DateTimeField(auto_now_add=True)
+    watch_time = models.IntegerField(default=0)  # in seconds
+    
+    def video_length(self):
+        video_path = os.path.join(self.lesson.content.path)
+        try:
+            clip = VideoFileClip(video_path)
+            length = clip.duration
+            clip.close()
+            return int(length) if length else 0
+        except Exception as e:
+            print(f"Error reading video duration: {e}")
+            return 0
+
 
     def __str__(self):
         return f"{self.student} completed {self.lesson}"

@@ -18,69 +18,6 @@ KalaPathshala Player
         }
         .container {
             display: flex;
-            min-height: 100vh;
-        }
-        .sidebar {
-            width: 300px;
-            background: #fff;
-            box-shadow: 2px 0 16px rgba(109,40,217,0.07);
-            padding: 2rem 1rem 1rem 1.5rem;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-        }
-        .sidebar-title {
-            font-weight: 700;
-            font-size: 1.2rem;
-            color: #6d28d9;
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .sidebar-section {
-            margin-bottom: 1.5rem;
-        }
-        .sidebar-section-title {
-            font-weight: 600;
-            cursor: pointer;
-            margin-bottom: 0.5rem;
-            color: #333;
-        }
-        .sidebar-items {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .sidebar-item {
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            color: #666;
-            cursor: pointer;
-            margin-bottom: 0.2rem;
-            transition: all 0.2s ease;
-        }
-        .sidebar-item.active, .sidebar-item:hover {
-            background: #6d28d9;
-            color: #fff !important;
-        }
-        a.sidebar-item {
-            text-decoration: none !important;
-            color: inherit;
-            display: block;
-            position: relative;
-            z-index: 1;
-            pointer-events: auto;
-        }
-        a.sidebar-item:hover {
-            color: #fff !important;
-            text-decoration: none !important;
-        }
-        a.sidebar-item:visited {
-            color: inherit;
-        }
-        a.sidebar-item:active {
-            color: #fff !important;
         }
         .main {
             flex: 1;
@@ -191,28 +128,10 @@ KalaPathshala Player
         }
         @media (max-width: 700px) {
             .container { flex-direction: column; }
-            .sidebar { width: 100vw; max-width: 100vw; box-shadow: none; }
             .main { padding: 0; }
             .player-title, .session-details, .video-player { margin-left: 0; }
         }
-        .sidebar-section .arrow {
-            margin-left: auto;
-            transition: transform 0.2s;
-            display: inline-block;
-        }
-        .sidebar-section.collapsed .arrow {
-            transform: rotate(-90deg);
-        }
-        .sidebar-section .sidebar-items {
-            max-height: 500px;
-            overflow: hidden;
-            transition: max-height 0.3s;
-        }
-        .sidebar-section.collapsed .sidebar-items {
-            max-height: 0;
-            padding: 0;
-            margin: 0;
-        }
+        
         .video-controls-bar {
             width: 100%;
             display: flex;
@@ -240,24 +159,7 @@ KalaPathshala Player
             background: #181c24;
             color: #fff;
         }
-        [data-theme="dark"] .sidebar {
-            background: #23263a;
-            color: #fff;
-            box-shadow: 2px 0 16px rgba(59,130,246,0.07);
-        }
-        [data-theme="dark"] .sidebar-title {
-            color: #ffe082;
-        }
-        [data-theme="dark"] .sidebar-section-title {
-            color: #fff;
-        }
-        [data-theme="dark"] .sidebar-item {
-            color: #b3b3b3;
-        }
-        [data-theme="dark"] .sidebar-item.active, [data-theme="dark"] .sidebar-item:hover {
-            background: #2563eb;
-            color: #fff;
-        }
+       
         [data-theme="dark"] .main {
             background: #181c24;
         }
@@ -403,25 +305,7 @@ KalaPathshala Player
           } else {
             console.error("This browser doesn't support HLS playback.");
           }
-        
 
-
-        // Collapsible sidebar sections
-        function toggleSidebarSection(titleEl) {
-            const section = titleEl.parentElement;
-            const allSections = document.querySelectorAll('.sidebar-section');
-            allSections.forEach(sec => {
-                if (sec !== section) sec.classList.add('collapsed');
-            });
-            section.classList.toggle('collapsed');
-        }
-        // By default, collapse all except the first
-        window.addEventListener('DOMContentLoaded', () => {
-            const allSections = document.querySelectorAll('.sidebar-section');
-            allSections.forEach((sec, idx) => {
-                if (idx !== 0) sec.classList.add('collapsed');
-            });
-        });
         // Video controls bar logic
         //const video = document.getElementById('main-video');
         const speedBtn = document.getElementById('speed-btn');
@@ -449,6 +333,13 @@ KalaPathshala Player
             localStorage.setItem('theme', theme);
             themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
         });
+
+    function UpdateWatchTime() {
+        console.log("This function runs every 10 seconds");
+    }
+    // Run myFunction every 10 seconds (10000 milliseconds)
+    setInterval(UpdateWatchTime, 10000);
+
      
 
         // Django Messages with SweetAlert2

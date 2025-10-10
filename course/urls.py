@@ -12,4 +12,5 @@ urlpatterns = [
     path('upload/submit/', views.upload_content, name='upload_content'),
     path('mark_complete/<uid>/',views.mark_complete,name='mark_complete'),
     path('enrolled/invoice/<uid>/',views.invoice,name='invoice'),
+    path('video/watch-update/',views.update_watch_time,name='update_watch_time'),
 ]
