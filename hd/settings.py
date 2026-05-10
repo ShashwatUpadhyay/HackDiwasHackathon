@@ -28,9 +28,14 @@ DOMAIN_NAME = 'https://n4j8lz40-8000.inc1.devtunnels.ms/'
 SECRET_KEY = 'django-insecure-e9e-5p4sy-sg34e5@pe*=f+!z=x+p#5v93^7oy7hrc%pblo16&'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [
+    'hackdiwashackathon-2.onrender.com'
+]
+CSRF_TRUSTED_ORIGINS = [
+    'https://hackdiwashackathon-2.onrender.com'
+]
 
 # Application definition
 
